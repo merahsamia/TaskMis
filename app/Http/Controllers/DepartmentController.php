@@ -13,6 +13,11 @@ class DepartmentController extends Controller
 
     public function storeDepartment(Request $request)
     {
+        $request->validate([
+            'name' => ['required'],
+            'director_id' => ['required'],
+        ]);
+
         Department::create([
             'user_id' => 1,
             'director_id' => $request->director_id,
@@ -28,6 +33,11 @@ class DepartmentController extends Controller
 
     public function updateDepartment(Request $request, $id)
     {
+        $request->validate([
+            'name' => ['required'],
+            'director_id' => ['required'],
+        ]);
+        
         Department::where('id', $id)->update([
 
             'director_id' => $request->director_id,
