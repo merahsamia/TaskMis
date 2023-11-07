@@ -33,6 +33,13 @@ class DepartmentController extends Controller
             'director_id' => $request->director_id,
             'name' => $request->name,
         ]);
+        return response()->json('success');
+    }
+
+    public function deleteDepartment($id)
+    {
+        Department::where('id', $id)->delete();
+        return response()->json('success');
     }
 
 
