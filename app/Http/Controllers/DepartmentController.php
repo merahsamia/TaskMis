@@ -9,6 +9,7 @@ use Session;
 
 class DepartmentController extends Controller
 {
+
     // below code is related to Vue Js code
 
     public function storeDepartment(Request $request)
@@ -37,7 +38,7 @@ class DepartmentController extends Controller
             'name' => ['required'],
             'director_id' => ['required'],
         ]);
-        
+
         Department::where('id', $id)->update([
 
             'director_id' => $request->director_id,

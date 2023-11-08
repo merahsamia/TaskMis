@@ -78,7 +78,10 @@
                                 <a class="nav-link" href="#">Settings</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Logout</a>
+                                <a class="nav-link" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                                <form id="logout-form" action="{{route('logout')}}" method="POST">
+                                    @csrf
+                                </form>
                             </li>
 
                         </ul>
@@ -96,7 +99,7 @@
             @endif
 
             @if(Session::has('success-message'))
-            <p class="text-success">
+            <p class=" text-success">
                 {{Session::get('success-message')}}
             </p>
             @endif
