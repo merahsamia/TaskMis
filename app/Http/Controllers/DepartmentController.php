@@ -9,6 +9,11 @@ use Session;
 
 class DepartmentController extends Controller
 {
+    // function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
+
 
     // below code is related to Vue Js code
 
@@ -27,8 +32,10 @@ class DepartmentController extends Controller
 
         return response()->json('success');
     }
+
     public function getDepartments()
     {
+
         return response()->json(Department::latest()->get());
     }
 
@@ -67,6 +74,8 @@ class DepartmentController extends Controller
     {
         return view('management.departments.create');
     }
+
+
     public function store(Request $request)
     {
         $request->validate([

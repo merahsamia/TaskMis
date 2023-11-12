@@ -9,6 +9,8 @@
 
                 </div>
                 <div class="card-body">
+                    <button @click="testAction" class="btn btn-info"> test</button>
+                    {{ test }}
                     <div class="table-responsive">
                         <table class="table table-hover text-center">
                             <thead>
@@ -167,7 +169,7 @@ export default {
             : this.departmentErrors.director_id = false
  //if (this.departmentData.name && this.departmentData.director_id){
 
-    this.departmentData.post(window.url + 'api/updateDepartment/' + this.departmentData.id)
+            this.departmentData.post(window.url + 'api/updateDepartment/' + this.departmentData.id)
          .then((response) => {
              this.getDepartments()
              $('#exampleModal').modal('hide')
@@ -186,11 +188,23 @@ export default {
                        
                     })
             }
-        }
+        },
+
+
+        testAction(){
+            this.$store.dispatch('testAction')
+
+        },
     },
 
     mounted() {
         this.getDepartments()
+    },
+
+    computed: {
+        test() {
+            return this.$store.getters.test
+        }
     }
 
 }

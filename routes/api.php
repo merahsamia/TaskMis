@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('storeDepartment', [DepartmentController::class, 'storeDepartment']);
-Route::get('getDepartments', [DepartmentController::class, 'getDepartments']);
+Route::get('getDepartments', [DepartmentController::class, 'getDepartments'])->middleware('auth:api');
 Route::post('updateDepartment/{id}', [DepartmentController::class, 'updateDepartment']);
 Route::post('deleteDepartment/{id}', [DepartmentController::class, 'deleteDepartment']);
