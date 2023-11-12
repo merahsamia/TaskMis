@@ -113,7 +113,6 @@ export default {
                 name: '',
                 director_id: '',
             }),
-            departments: {},
             editMode: false,
 
             departmentErrors: {
@@ -131,6 +130,7 @@ export default {
             $('#exampleModal').modal('show')
         },
 
+
         storeDepartment() {
             // this.departmentData.name == '' ? this.departmentErrors.name = true
             // : this.departmentErrors.name = false
@@ -138,21 +138,14 @@ export default {
             // : this.departmentErrors.director_id = false
             //if (this.departmentData.name && this.departmentData.director_id) {
 
-            this.departmentData.post(window.url + 'api/storeDepartment')
-                .then((response) => {
-                    this.getDepartments()
-                    $('#exampleModal').modal('hide')
-                })
+           this.$store.dispatch('storeDepartment', this.departmentData)
         //}
         },
 
-        getDepartments() {
-            axios.get(`${window.url}api/getDepartments`).then((response) => {
-                console.log(response.data)
-                this.departments = response.data
-
-            })
-        },
+        
+        // getDepartments() {
+            
+        // },
 
         editDepartment(department) {
             this.editMode = true
@@ -162,48 +155,41 @@ export default {
             $('#exampleModal').modal('show')
         },
 
+
         updateDepartment() {
-            this.departmentData.name == '' ? this.departmentErrors.name = true
-            : this.departmentErrors.name = false
-            this.departmentData.director_id == '' ? this.departmentErrors.director_id = true
-            : this.departmentErrors.director_id = false
- //if (this.departmentData.name && this.departmentData.director_id){
+            // this.departmentData.name == '' ? this.departmentErrors.name = true
+            // : this.departmentErrors.name = false
+            // this.departmentData.director_id == '' ? this.departmentErrors.director_id = true
+            // : this.departmentErrors.director_id = false
+            //if (this.departmentData.name && this.departmentData.director_id){
 
-            this.departmentData.post(window.url + 'api/updateDepartment/' + this.departmentData.id)
-         .then((response) => {
-             this.getDepartments()
-             $('#exampleModal').modal('hide')
-         })
- //}
-
-
-
+            this.$store.dispatch('updateDepartment', this.departmentData)
+        //}
         },
+
 
         deleteDepartment(department) {
-            if (confirm('Are you sure you wanna delete department')) {
-                axios.post(window.url + 'api/deleteDepartment/' + department.id)
-                    .then(() => {
-                        this.getDepartments()
-                       
-                    })
-            }
+           this.$store.dispatch('deleteDepartment', department)
         },
 
 
-        testAction(){
-            this.$store.dispatch('testAction')
+        // testAction(){
+        //     this.$store.dispatch('testAction')
 
-        },
+        // },
     },
 
     mounted() {
-        this.getDepartments()
+        this.$store.dispatch('getDepartments')
     },
 
     computed: {
-        test() {
-            return this.$store.getters.test
+        // test() {
+        //     return this.$store.getters.test
+        // },
+
+        departments(){
+            return this.$store.getters.departments
         }
     }
 
