@@ -9,8 +9,10 @@
 
                 </div>
                 <div class="card-body">
+                                        <!-- 
+
                     <button @click="testAction" class="btn btn-info"> test</button>
-                    {{ test }}
+                    {{ test }}  -->
                     <div class="table-responsive">
                         <table class="table table-hover text-center">
                             <thead>
