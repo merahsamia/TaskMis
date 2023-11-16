@@ -21,12 +21,10 @@ class DepartmentController extends Controller
     {
         $request->validate([
             'name' => ['required'],
-            'director_id' => ['required'],
         ]);
 
         Department::create([
             'user_id' => 1,
-            'director_id' => $request->director_id,
             'name' => $request->name,
         ]);
 
@@ -43,12 +41,10 @@ class DepartmentController extends Controller
     {
         $request->validate([
             'name' => ['required'],
-            'director_id' => ['required'],
         ]);
 
         Department::where('id', $id)->update([
 
-            'director_id' => $request->director_id,
             'name' => $request->name,
         ]);
         return response()->json('success');
@@ -80,12 +76,10 @@ class DepartmentController extends Controller
     {
         $request->validate([
             'name' => ['required'],
-            'director_id' => ['required'],
         ]);
 
         Department::create([
             'user_id' => 1,
-            'director_id' => $request->director_id,
             'name' => $request->name,
         ]);
 
@@ -103,11 +97,9 @@ class DepartmentController extends Controller
     {
         $request->validate([
             'name' => ['required'],
-            'director_id' => ['required'],
         ]);
         Department::where('id', $id)->update([
 
-            'director_id' => $request->director_id,
             'name' => $request->name,
         ]);
         Session::flash('success-message', 'Department updated successfully!');

@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header bg-dark">
                     <h5 class="float-start text-light">Departments List</h5>
-                    <button class="btn btn-success float-end" v-on:click="createDepartment">
+                    <button class="btn btn-success float-end" v-on:click="createDepartment" v-if="current_permissions.has('departments-create')">
                         New Department</button>
 
                 </div>
@@ -19,16 +19,14 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th>Director</th>
-                                    <th>Actions</th>
+                                    <th v-if="current_permissions.has('departments-update') || current_permissions.has('departments-delete')">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(department, index) in departments" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ department.name }}</td>
-                                    <td>{{ department.director_id }}</td>
-                                    <td>
+                                    <td v-if="current_permissions.has('departments-update') || current_permissions.has('departments-delete')">
                                         <button class="btn btn-success mx-1" v-on:click="editDepartment(department)">
                                             <i class="fa fa-edit"></i></button>
 
@@ -55,7 +53,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="name">Name</label>
                                                 <input type="text" class="form-control" name="name"
@@ -65,22 +63,7 @@
 
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="director_id">Director</label>
-                                                <select name="director_id" class="form-control"
-                                                    v-model="departmentData.director_id">
-                                                    <option value="">Select a person</option>
-                                                    <option value="1">IT Director</option>
-                                                    <option value="2">HR Director</option>
-                                                </select>
-                                                <!-- <p class="text-danger" v-if="departmentErrors.director_id">Director is required</p> -->
-                                                <div class="text-danger" 
-                                                v-if="departmentData.errors.has('director_id')"
-                                                 v-html="departmentData.errors.get('director_id')" />
-
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -113,13 +96,11 @@ export default {
             departmentData: new Form( {
                 id: '',
                 name: '',
-                director_id: '',
             }),
             editMode: false,
 
             departmentErrors: {
                 name: false,
-                director_id: false,
             },
 
         }
@@ -128,7 +109,7 @@ export default {
     methods: {
         createDepartment() {
             this.editMode = false
-            this.departmentData.name = this.departmentData.director_id = ''
+            this.departmentData.name = ''
             $('#exampleModal').modal('show')
         },
 
@@ -153,7 +134,6 @@ export default {
             this.editMode = true
             this.departmentData.id = department.id
             this.departmentData.name = department.name
-            this.departmentData.director_id = department.director_id
             $('#exampleModal').modal('show')
         },
 
@@ -183,6 +163,7 @@ export default {
 
     mounted() {
         this.$store.dispatch('getDepartments')
+        this.$store.dispatch('getAuthRolesAndPermissions')
     },
 
     computed: {
@@ -192,6 +173,12 @@ export default {
 
         departments(){
             return this.$store.getters.departments
+        },
+        current_roles(){
+            return this.$store.getters.current_roles
+        },
+        current_permissions(){
+            return this.$store.getters.current_permissions
         }
     }
 
