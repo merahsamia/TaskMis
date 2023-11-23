@@ -177,6 +177,9 @@ export default {
         ,
         createUser() {
             this.editMode = false
+            this.userData.clear()
+            this.userData.reset()
+
             this.userData.name = ''
             $('#exampleModal').modal('show')
         },

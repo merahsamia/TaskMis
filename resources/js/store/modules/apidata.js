@@ -62,7 +62,6 @@ export default {
 
         set_filtered_permissions: (state, data) => {
             state.filtered_permissions = [];
-            console.log(data.values)
             data.values.forEach(value => {
                 state.all_permissions.find(element => {
                     if(element.name.includes(value)) {

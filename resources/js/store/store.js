@@ -2,12 +2,14 @@ import {createStore} from 'vuex';
 
 import departmentsModule from './modules/departments';
 import apidataModule from './modules/apidata';
+import usersModule from './modules/users';
 
 export const store = createStore({
     strict: true,
     modules: {
         departmentsModule,
-        apidataModule
+        apidataModule,
+        usersModule,
     },
     state: {
         // test: 0,
