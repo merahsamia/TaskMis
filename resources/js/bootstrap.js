@@ -18,6 +18,15 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+function loggedIn() {
+    if(window.token) {
+    let successToken = window.token;
+    axios.defaults.headers.common = {'Authorization': `Bearer ${successToken}`};  
+    return successToken; }
+        return;
+}
+
+loggedIn()
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

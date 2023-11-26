@@ -18,7 +18,14 @@ use App\Http\Controllers\AuthController;
 |
 */
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::get('/', [HomeController::class, 'dashboard']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+Route::get('/', function() {
+    return redirect('/login');
+});
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
 
 
 

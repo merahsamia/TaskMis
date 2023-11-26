@@ -100,6 +100,7 @@
                                 <a class="nav-link" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                                 <form id="logout-form" action="{{route('logout')}}" method="POST">
                                     @csrf
+                                    <logout-component></logout-component>
                                 </form>
                             </li>
 
@@ -128,6 +129,8 @@
 
   @auth
   <script>
+        window.token = {!! json_encode(session()->get('token'))!!}
+
         window.auth_roles = {!!json_encode(auth()->user()->roles) !!};
         window.auth_permissions = {!!json_encode(auth()->user()->permissions) !!};
     </script>
