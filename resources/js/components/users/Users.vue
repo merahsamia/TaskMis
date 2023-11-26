@@ -14,28 +14,32 @@
                     <button @click="testAction" class="btn btn-info"> test</button>
                     {{ test }}  -->
                     <div class="table-responsive">
-                        <!-- <table class="table table-hover text-center">
+                        <table class="table table-hover text-center">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
-                                    <th v-if="current_permissions.has('departments-update') || current_permissions.has('departments-delete')">Actions</th>
+                                    <th>Email</th>
+                                    <th>Department</th>
+                                    <th v-if="current_permissions.has('users-update') || current_permissions.has('users-delete')">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(department, index) in departments" :key="index">
+                                <tr v-for="(user, index) in users" :key="index">
                                     <td>{{ index + 1 }}</td>
-                                    <td>{{ department.name }}</td>
-                                    <td v-if="current_permissions.has('departments-update') || current_permissions.has('departments-delete')">
-                                        <button class="btn btn-success mx-1" v-on:click="editDepartment(department)">
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.department != null ? user.department.name: '...' }}</td>
+                                    <td v-if="current_permissions.has('users-update') || current_permissions.has('users-delete')">
+                                        <button class="btn btn-success mx-1" v-on:click="editUser(user)">
                                             <i class="fa fa-edit"></i></button>
 
-                                        <button class="btn btn-danger mx-1" v-on:click="deleteDepartment(department)">
+                                        <button class="btn btn-danger mx-1" v-on:click="deleteUser(user)">
                                             <i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
-                        </table> -->
+                        </table>
                     </div>
 
 
@@ -169,7 +173,6 @@ export default {
                         this.userData.selected_permissions.push(item.value);
                     }
                 });
-
             });
             
         }
@@ -198,9 +201,34 @@ export default {
 
         editUser(user) {
             this.editMode = true
-            this.userData.id = user.id
-            this.userData.name = user.name
-            $('#exampleModal').modal('show')
+            this.userData.id=  user.id  
+            this.userData.department_id=  user.department_id == 0 ? '' : user.department_id
+            this.userData.name=  user.name  
+            this.userData.email=  user.email  
+            this.userData.selected_roles= []
+            this.userData.selected_permission_categories = []
+            this.userData.selected_permissions = []
+
+            user.roles.forEach(role => {
+                this.userData.selected_roles.push(role.id)
+            })
+
+            let permissionsArray = []
+            user.permissions.forEach(permission => {
+                let permissions =  permission.name.split('-');
+                permissionsArray.push(permissions[0])
+            } );
+
+            let uniqueItems = [...new Set(permissionsArray)];
+            this.userData.selected_permission_categories = uniqueItems;
+
+            this.$store.dispatch('getFilteredPermissions', {values: uniqueItems}).then(()=> {
+                user.permissions.forEach(permission => {
+                    this.userData.selected_permissions.push(permission.id)
+                })
+            });
+
+           $('#exampleModal').modal('show')
         },
 
 
@@ -220,6 +248,7 @@ export default {
     },
 
     mounted() {
+        this.$store.dispatch('getUsers')
         this.$store.dispatch('getAllDepartments')
         this.$store.dispatch('getAllRoles')
         this.$store.dispatch('getAllPermissions')
@@ -228,6 +257,9 @@ export default {
 
     computed: {
     
+        users(){
+            return this.$store.getters.users
+        },
         filtered_departments(){
             return this.$store.getters.filtered_departments
         },

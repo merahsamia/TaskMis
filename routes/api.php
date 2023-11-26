@@ -21,14 +21,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('storeDepartment', [DepartmentController::class, 'storeDepartment']);
-Route::get('getDepartments', [DepartmentController::class, 'getDepartments'])->middleware('auth:api');
-Route::post('updateDepartment/{id}', [DepartmentController::class, 'updateDepartment']);
-Route::post('deleteDepartment/{id}', [DepartmentController::class, 'deleteDepartment']);
+Route::group(['middleware',['forcetojson', 'auth:api']], function() {
 
 
-Route::get('getAllDepartments', [ApiController::class, 'getAllDepartments'])->middleware('auth:api');
-Route::get('getAllRoles', [ApiController::class, 'getAllRoles'])->middleware('auth:api');
-Route::get('getAllPermissions', [ApiController::class, 'getAllPermissions'])->middleware('auth:api');
-
-Route::post('storeUser', [UserController::class, 'storeUser']);
+    Route::post('storeDepartment', [DepartmentController::class, 'storeDepartment']);
+    Route::get('getDepartments', [DepartmentController::class, 'getDepartments']);
+    Route::post('updateDepartment/{id}', [DepartmentController::class, 'updateDepartment']);
+    Route::post('deleteDepartment/{id}', [DepartmentController::class, 'deleteDepartment']);
+    
+    
+    Route::get('getAllDepartments', [ApiController::class, 'getAllDepartments']);
+    Route::get('getAllRoles', [ApiController::class, 'getAllRoles']);
+    Route::get('getAllPermissions', [ApiController::class, 'getAllPermissions']);
+    
+    Route::post('storeUser', [UserController::class, 'storeUser']);
+    Route::get('getUsers', [UserController::class, 'getUsers']);
+    Route::post('updateUser/{id}', [UserController::class, 'updateUser']);
+    Route::post('deleteUser/{id}', [UserController::class, 'deleteUser']);
+});

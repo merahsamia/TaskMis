@@ -11,16 +11,21 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 mt-5">
-                <img src="{{ asset('public/images/auth.png')}}" alt="auth" width="100%">
-            </div>
-            <div class=" col-md-4">
-                @yield('content')
+    <div class="auth-main">
+        <div class="auth-container">
+            <div class="container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-6 d-md-block d-none">
+                        <img src="{{ asset('public/images/auth.png')}}" alt="auth" width="100%">
+                    </div>
+                    <div class=" col-md-6">
+                        @yield('content')
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+  
 </body>
 
 </html>

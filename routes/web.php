@@ -6,6 +6,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,8 +17,10 @@ use App\Http\Controllers\PermissionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/', [HomeController::class, 'dashboard']);
+
+
 
 Route::get('departments.index', [DepartmentController::class, 'index'])->name('departmentsIndex');
 Route::get('departments/create', [DepartmentController::class, 'create'])->name('departmentsCreate');

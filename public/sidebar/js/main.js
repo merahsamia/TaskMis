@@ -16,4 +16,8 @@
       $('#sidebar').toggleClass('active');
   });
 
+	$('#navbarCollapse').on('click', function () {
+      $('#navbarSupportedContent').toggleClass('collapse');
+  });
+
 })(jQuery);
