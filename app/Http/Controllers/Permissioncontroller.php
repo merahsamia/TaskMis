@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Permission;
 use Session;
+use Validator;
 
 class Permissioncontroller extends Controller
 {
     public function index()
     {
 
-       $permissions = Permission::all();
+       $permissions = Permission::orderBy('id', 'desc')->paginate(10);
        return view('management.permissions.index', compact('permissions'));
 
    }
@@ -26,11 +27,18 @@ class Permissioncontroller extends Controller
         //return $request->all();
         if($request->permission_type== 'basic')
             {
-                $request->validate([
+
+                $validation = Validator::make($request->all(), [
                     'name'  =>'required',
                     'display_name'  =>'required',
                     'description'  =>'required',
                 ]);
+        
+        
+                if($validation->fails()){
+                    return redirect()->back()->withErrors($validation);
+                };
+
                 Permission::create([
                     'name'  => $request->name,
                     'display_name'  => $request->display_name,
@@ -42,9 +50,17 @@ class Permissioncontroller extends Controller
 
             } elseif($request->permission_type == 'crud')
                 {
-                    $request->validate([
+                  
+
+                    $validation = Validator::make($request->all(), [
                         'resource'      =>'required',
+
                     ]);
+            
+            
+                    if($validation->fails()){
+                        return redirect()->back()->withErrors($validation);
+                    };
 
                     $crud = $request->crudSelected;
 
@@ -77,11 +93,17 @@ class Permissioncontroller extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+
+        $validation = Validator::make($request->all(), [
             'name'          =>'required',
             'display_name'  =>'required',
             'description'   =>'required',
         ]);
+
+
+        if($validation->fails()){
+            return redirect()->back()->withErrors($validation);
+        };
 
         Permission::where('id' , $id )->update([
             'name'          => $request->name,

@@ -21,21 +21,34 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware',['forcetojson', 'auth:api']], function() {
+Route::middleware(['forcetojson', 'auth:api'])->group(function(){
+
+    Route::controller(DepartmentController::class)->group(function(){
+
+        Route::post('storeDepartment',  'storeDepartment')->middleware('permission:departments-create');
+        Route::get('getDepartments',  'getDepartments')->middleware('permission:departments-read');
+        Route::post('updateDepartment/{id}',  'updateDepartment')->middleware('permission:departments-update');
+        Route::post('deleteDepartment/{id}',  'deleteDepartment')->middleware('permission:departments-delete');
+    });
 
 
-    Route::post('storeDepartment', [DepartmentController::class, 'storeDepartment']);
-    Route::get('getDepartments', [DepartmentController::class, 'getDepartments']);
-    Route::post('updateDepartment/{id}', [DepartmentController::class, 'updateDepartment']);
-    Route::post('deleteDepartment/{id}', [DepartmentController::class, 'deleteDepartment']);
+    Route::controller(ApiController::class)->group(function(){
+
+        Route::get('getAllDepartments', 'getAllDepartments')->middleware('permission:departments-read');
+        Route::get('getAllRoles', 'getAllRoles')->middleware('permission:roles-read');
+        Route::get('getAllPermissions', 'getAllPermissions')->middleware('permission:permissions-read');
+    });
     
     
-    Route::get('getAllDepartments', [ApiController::class, 'getAllDepartments']);
-    Route::get('getAllRoles', [ApiController::class, 'getAllRoles']);
-    Route::get('getAllPermissions', [ApiController::class, 'getAllPermissions']);
+    Route::controller(UserController::class)->group(function(){
+
+        Route::post('storeUser', 'storeUser')->middleware('permission:users-create');
+        Route::get('getUsers', 'getUsers')->middleware('permission:users-read');
+        Route::post('updateUser/{id}', 'updateUser')->middleware('permission:users-update');
+        Route::post('deleteUser/{id}', 'deleteUser')->middleware('permission:users-delete');
+
+    });
     
-    Route::post('storeUser', [UserController::class, 'storeUser']);
-    Route::get('getUsers', [UserController::class, 'getUsers']);
-    Route::post('updateUser/{id}', [UserController::class, 'updateUser']);
-    Route::post('deleteUser/{id}', [UserController::class, 'deleteUser']);
 });
+
+
