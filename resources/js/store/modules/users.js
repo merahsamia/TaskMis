@@ -56,6 +56,13 @@ export default {
             .then((response) => {
                 context.dispatch('getUsers')  ,
                 $('#exampleModal').modal('hide')
+
+                window.Toast.fire({
+                    icon: "success",
+                    title: "User created successfully!"
+                  });
+
+
             })
         },
 
@@ -73,17 +80,28 @@ export default {
             .then((response) => {
             context.dispatch('getUsers')  ,
            $('#exampleModal').modal('hide')
+
+           window.Toast.fire({
+            icon: "success",
+            title: "User updated successfully!"
+          });
+
+
+           
          })
 
         },
 
         deleteUser(context, userData) {
-            if (confirm('Are you sure you wanna delete the user')) {
-                axios.post(window.url + 'api/deleteUser/' + userData.id)
-                    .then(() => {
-                        context.dispatch('getUsers')
-                    });
-            }
+            axios.post(window.url + 'api/deleteUser/' + userData.id)
+                .then(() => {
+                    context.dispatch('getUsers')
+                    window.Toast.fire({
+                        icon: "success",
+                        title: "User deleted successfully!"
+                        });
+                });
+            
         }
 
      

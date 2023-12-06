@@ -26,6 +26,7 @@
         "@vueform/multiselect": "^2.6.6",
         "bootstrap": "^5.3.2",
         "jquery": "^3.7.1",
+        "sweetalert2": "^11.10.1",
         "vform": "^2.1.2",
         "vuex": "^4.0.2",
         "webpack-cli": "^5.1.4",

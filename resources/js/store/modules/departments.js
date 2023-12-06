@@ -54,6 +54,11 @@ export default {
             .then((response) => {
                 context.dispatch('getDepartments')  ,
                 $('#exampleModal').modal('hide')
+
+                window.Toast.fire({
+                    icon: "success",
+                    title: "Department created successfully!"
+                  });
             })
         },
 
@@ -70,17 +75,24 @@ export default {
             .then((response) => {
             context.dispatch('getDepartments')  ,
            $('#exampleModal').modal('hide')
+           window.Toast.fire({
+            icon: "success",
+            title: "Department updated successfully!"
+          });
          })
 
         },
 
         deleteDepartment(context, departmentData) {
-            if (confirm('Are you sure you wanna delete department')) {
                 axios.post(window.url + 'api/deleteDepartment/' + departmentData.id)
                     .then(() => {
                         context.dispatch('getDepartments')
+                        window.Toast.fire({
+                            icon: "success",
+                            title: "Department deleted successfully!"
+                          });
                     });
-            }
+            
         }
     },
 }
