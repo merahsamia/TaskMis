@@ -110,18 +110,24 @@
             </nav>
 
             @if($errors->any())
-            @foreach($errors->all() as $error)
-            <p class="text-danger">
-                {{$error}}
+                @foreach($errors->all() as $error)
 
-            </p>
-            @endforeach
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{$error}}
+
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                 
+                 @endforeach
             @endif
 
             @if(Session::has('success-message'))
-            <p class=" text-success">
-                {{Session::get('success-message')}}
-            </p>
+
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{Session::get('success-message')}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            
             @endif
             @yield('content')
         </div>

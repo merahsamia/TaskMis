@@ -34,7 +34,7 @@ class DepartmentController extends Controller
     public function getDepartments()
     {
 
-        return response()->json(Department::latest()->get());
+        return response()->json(Department::latest()->paginate(10));
     }
 
     public function updateDepartment(Request $request, $id)

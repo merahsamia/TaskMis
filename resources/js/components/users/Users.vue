@@ -42,7 +42,7 @@
                         </table>
                     </div>
 
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center" v-if="userLinks.length > 3">
 
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
