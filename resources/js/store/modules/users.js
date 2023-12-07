@@ -102,7 +102,17 @@ export default {
                         });
                 });
             
-        }
+        },
+
+        searchUser:(context, searchData) => {
+            setTimeout(function(){
+                axios.get(`${window.url}api/searchUser?${searchData.search_type}=${searchData.search_value}`).then((response) => {
+                    context.commit('set_users', response.data)
+                }).catch(err => {
+                    console.log(err);
+                })
+            })
+        },
 
      
     },

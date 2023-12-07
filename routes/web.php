@@ -55,6 +55,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('roles/edit/{id}', 'edit')->name('rolesEdit')->middleware('permission:roles-update');
         Route::post('roles/update/{id}', 'update')->name('rolesUpdate')->middleware('permission:roles-update');
         Route::post('roles/delete/{id}', 'delete')->name('rolesDelete')->middleware('permission:roles-delete');
+        Route::post('roles/search', 'search')->name('rolesSearch')->middleware('permission:roles-read');
     });
     
     Route::controller(PermissionController::class)->group(function(){
@@ -65,6 +66,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('permissions/edit/{id}', 'edit')->name('permissionsEdit')->middleware('permission:permissions-update');
         Route::post('permissions/update/{id}', 'update')->name('permissionsUpdate')->middleware('permission:permissions-update');
         Route::post('permissions/delete/{id}', 'delete')->name('permissionsDelete')->middleware('permission:permissions-delete');
+        Route::post('permissions/search', 'search')->name('permissionsSearch')->middleware('permission:permissions-read');
     });
 
 

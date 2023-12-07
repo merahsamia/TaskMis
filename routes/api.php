@@ -27,6 +27,7 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
 
         Route::post('storeDepartment',  'storeDepartment')->middleware('permission:departments-create');
         Route::get('getDepartments',  'getDepartments')->middleware('permission:departments-read');
+        Route::get('searchDepartment',  'searchDepartment')->middleware('permission:departments-read');
         Route::post('updateDepartment/{id}',  'updateDepartment')->middleware('permission:departments-update');
         Route::post('deleteDepartment/{id}',  'deleteDepartment')->middleware('permission:departments-delete');
     });
@@ -41,7 +42,8 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
     
     
     Route::controller(UserController::class)->group(function(){
-
+        
+        Route::get('searchUser', 'searchUser')->middleware('permission:users-read');
         Route::post('storeUser', 'storeUser')->middleware('permission:users-create');
         Route::get('getUsers', 'getUsers')->middleware('permission:users-read');
         Route::post('updateUser/{id}', 'updateUser')->middleware('permission:users-update');
