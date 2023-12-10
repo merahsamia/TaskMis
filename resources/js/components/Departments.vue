@@ -148,10 +148,11 @@ export default {
         },
 
         getResults(link) {
+            console.log(link)
             if(!link.url || link.active){
                 return;
             } else{
-                this.$store.dispatch('getDepartmentsResults', link)
+                this.$store.dispatch('getDepartmentsResults', {link: link, searchData: this.searchData})
             }
 
         },

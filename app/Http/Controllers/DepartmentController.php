@@ -22,7 +22,7 @@ class DepartmentController extends Controller
         if($search = \Request::get('name')){
             $departments = Department::where(function($query) use ($search){
                     $query->where('name', 'LIKE', "%$search%");
-            })->latest()->paginate(10);
+            })->latest()->paginate(2);
         }else{
             $departments = Department::latest()->paginate(10);
         }
@@ -46,8 +46,13 @@ class DepartmentController extends Controller
 
     public function getDepartments()
     {
-
-        return response()->json(Department::latest()->paginate(10));
+        if($search = \Request::get('name')) {
+            return response()->json(Department::where(function($query) use ($search){
+                $query->where('name', 'LIKE', "%$search%");
+            })->latest()->paginate(2));
+        }else{
+            return response()->json(Department::latest()->paginate(10));
+        }
     }
 
     public function updateDepartment(Request $request, $id)

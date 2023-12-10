@@ -53,10 +53,10 @@ export default {
             })
         },
 
-        getDepartmentsResults: (context, link) => {
-            axios.get(link.url).then((response) => {
+        getDepartmentsResults: (context, data) => {
+            axios.get(`${data.link.url}&${data.searchData.search_type}=${data.searchData.search_value}`).then((response) => {
                 context.commit('set_departments', response.data)
-                
+                console.log(response.data)                
         })
         },
 
