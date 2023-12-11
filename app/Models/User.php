@@ -51,4 +51,9 @@ class User extends Authenticatable
         return $this->belongsTo('App\Models\Department');
 
     }
+
+    public function tasks()
+    {
+        return $this->belongsToMany('App\Models\Task');
+    }
 }
