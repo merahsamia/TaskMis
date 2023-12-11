@@ -44,10 +44,17 @@ export default {
 
     actions:{
 
-        getUsersResults: (context, link) => {
-            axios.get(link.url).then((response) => {
+        // getUsersResults: (context, link) => {
+        //     axios.get(link.url).then((response) => {
+        //         context.commit('set_users', response.data)
+
+        // })
+        // },
+
+        getUsersResults: (context, data) => {
+            axios.get(`${data.link.url}&${data.searchData.search_type}=${data.searchData.search_value}`).then((response) => {
                 context.commit('set_users', response.data)
-                
+                console.log(response.data)                
         })
         },
 
@@ -72,6 +79,8 @@ export default {
             })
 
         },
+
+    
 
         
         updateUser(context, userData) {
@@ -113,6 +122,9 @@ export default {
                 })
             })
         },
+
+
+     
 
      
     },

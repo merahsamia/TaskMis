@@ -60,9 +60,17 @@ class UserController extends Controller
        
     }
 
+
     public function getUsers()
     {
-        return response()->json(User::with('department')->with('roles')->with('permissions')->latest()->paginate(10));
+        if($search = \Request::get('name')){
+            $users = User::where(function($query) use ($search){
+                    $query->where('name', 'LIKE', "%$search%")
+                        ->orWhere('email', 'LIKE', "%$search%");
+            })->with('department')->with('roles')->with('permissions')->latest()->paginate(10);
+        }else{
+            return response()->json(User::with('department')->with('roles')->with('permissions')->latest()->paginate(10));
+        }
     }
 
     public function updateUser(Request $request, $id)

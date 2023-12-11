@@ -209,10 +209,12 @@ export default {
             if(!link.url || link.active){
                 return;
             } else{
-                this.$store.dispatch('getUsersResults', link)
+                this.$store.dispatch('getUsersResults', {link: link, searchData: this.searchData})
             }
 
         },
+
+      
 
         getFilteredPermissions (values) {
             this.$store.dispatch('getFilteredPermissions', {values: values}).then(() =>{
