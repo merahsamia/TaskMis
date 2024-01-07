@@ -7,6 +7,7 @@ import LogoutComponent from './components/auth/LogoutComponent.vue'
 import Departments from './components/Departments.vue'
 import Users from './components/Users/Users.vue'
 import PermissionsCreate from './components/permissions/PermissionsCreate.vue'
+import Tasks from './components/tasks/Tasks.vue'
 
 import Form from 'vform'
 window.Form = Form;
@@ -33,11 +34,12 @@ const Toast = Swal.mixin({
 
 const app= createApp({})
 
+app.component('multi-select', Multiselect);
 app.component('logout-component', LogoutComponent);
 app.component('departments', Departments);
 app.component('permissions-create', PermissionsCreate);
 app.component('users', Users);
-app.component('multi-select', Multiselect);
+app.component('tasks', Tasks);
 
 window.url = '/TaskMis/'
 
