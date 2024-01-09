@@ -72,11 +72,11 @@
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                         aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-dialog modal-xl modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">
-                                        {{ !editMode ? 'Create Department' : 'Update Department' }}
+                                        {{ !editMode ? 'Create Task' : 'Update Task' }}
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -128,15 +128,25 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="description">description</label>
-                                                <textarea rows="13" class="form-control" v-model="tastData.description"></textarea>
+                                                <textarea rows="13" class="form-control" v-model="taskData.description"></textarea>
                                                     <div class="text-danger" v-if="taskData.errors.has('description')" v-html="taskData.errors.get('description')" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="assign_to">Assign to</label>
+                                                <multi-select :options="filtered_users" 
+                                                v-model="taskData.assign_to" 
+                                                :searchable="true" mode="tags"></multi-select>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" @click="!editMode ? storeDepartment() : updateDepartment()"
+                                    <button type="button" @click="!editMode ? storeTask() : updateDepartment()"
                                         class="btn btn-success">
                                         {{ !editMode ? 'Store' : 'Save Changes' }}
                                     </button>
@@ -180,6 +190,7 @@ export default {
 
     mounted(){
         this.$store.dispatch('getAuthRolesAndPermissions')
+        this.$store.dispatch('getAllUsers')
 
     },
     computed: {
@@ -188,6 +199,9 @@ export default {
         },
         current_permissions(){
             return this.$store.getters.current_permissions
+        },
+        filtered_users(){
+            return this.$store.getters.filtered_users
         }
     },
 
@@ -197,6 +211,11 @@ export default {
             this.taskData.reset()
             this.taskData.clear()
             $('#exampleModal').modal('show')
+        },
+
+        storeTask() {
+            this.$store.dispatch('storeTask', this.taskData)
+
         },
     }
 

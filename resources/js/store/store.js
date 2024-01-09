@@ -3,6 +3,7 @@ import {createStore} from 'vuex';
 import departmentsModule from './modules/departments';
 import apidataModule from './modules/apidata';
 import usersModule from './modules/users';
+import tasksModule from './modules/tasks';
 
 export const store = createStore({
     strict: true,
@@ -10,6 +11,7 @@ export const store = createStore({
         departmentsModule,
         apidataModule,
         usersModule,
+        tasksModule,
     },
     state: {
         // test: 0,
