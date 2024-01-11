@@ -10,33 +10,18 @@ export default {
 
 
     getters: {
-        // departments(state) {
-        //     return state.departments
-        // },
-        // departmentLinks(state) {
-        //     return state.departmentLinks
-        // },
+        tasks(state) {
+            return state.tasks
+        },
+      
     },
 
 
     mutations: {
-        // set_departments: (state, data) => {
-        //     state.departments = data
+        set_tasks: (state, data) => {
+            state.tasks = data
 
-        //     state.departmentLinks = []
-
-        //     for(let i=0; i < data.links.length; i++)
-        //     {
-        //         if(i === 1
-        //             || i === Number(data.links.length - 2)
-        //             || data.links[i].active 
-        //             || isNaN(data.links[i].label)
-        //             || Number(data.links[i].label) === Number(data.current_page + 1)
-        //             || Number(data.links[i].label) === Number(data.current_page - 1)){
-        //                 state.departmentLinks.push(data.links[i])
-        //             }
-        //     }
-        // }
+   
     },
 
 
@@ -63,7 +48,6 @@ export default {
         storeTask: (context, taskData) => {
             taskData.post(window.url + 'api/storeTask')
             .then((response) => {
-               // context.dispatch('getTasks')  ,
                 $('#exampleModal').modal('hide')
 
                 window.Toast.fire({
@@ -73,12 +57,12 @@ export default {
             })
         },
 
-        // getDepartments: (context) => {
-        //     axios.get(`${window.url}api/getDepartments`).then((response) => {
-        //         context.commit('set_departments', response.data)
-        //     })
+        getTasks: (context) => {
+            axios.get(`${window.url}api/getTasks`).then((response) => {
+                context.commit('set_tasks', response.data)
+            })
 
-        // },
+        },
 
         // updateDepartment(context, departmentData) {
 

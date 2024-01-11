@@ -140,6 +140,9 @@
                                                 <multi-select :options="filtered_users" 
                                                 v-model="taskData.assign_to" 
                                                 :searchable="true" mode="tags"></multi-select>
+
+                                                <div class="text-danger" v-if="taskData.errors.has('assign_to')" v-html="taskData.errors.get('assign_to')" />
+
                                             </div>
                                         </div>
                                     </div>
@@ -191,6 +194,7 @@ export default {
     mounted(){
         this.$store.dispatch('getAuthRolesAndPermissions')
         this.$store.dispatch('getAllUsers')
+        this.$store.dispatch('getTasks')
 
     },
     computed: {
@@ -203,7 +207,10 @@ export default {
         filtered_users(){
             return this.$store.getters.filtered_users
         }
-    },
+        },
+        tasks(){
+            return this.$store.getters.tasks
+        },
 
     methods: {
         createTask() {

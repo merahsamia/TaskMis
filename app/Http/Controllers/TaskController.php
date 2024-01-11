@@ -20,10 +20,10 @@ class TaskController extends Controller
             'start_date' => ['required'],
             'end_date' => ['required'],
             'description' => ['required'],
-            'assign_to' => ['required', 'array'],
+            'assign_to' => ['required', 'array']
         ]);
 
-        Task::create([
+        $task = Task::create([
             'user_id' => auth('api')->user()->id,
             'department_id' => auth('api')->user()->department_id,
             'title' => $request->title,
@@ -33,5 +33,9 @@ class TaskController extends Controller
             'description' => $request->description,
             
         ]);
+
+        $task->users()->sync($request->assign_to);
+
+        return response()->json('success');
     }
 }

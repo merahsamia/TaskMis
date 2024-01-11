@@ -18,7 +18,8 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('parent_id')->default('0');
             $table->integer('department_id');
-            $table->integer('performed_by');
+            $table->integer('performed_by')->default('0');
+            $table->string('title');
             $table->text('description');
             $table->string('priority');
             $table->string('start_date');
