@@ -1,3 +1,4 @@
+
 <template>
     <div class="row">
         <div class="col-md-12">
@@ -36,37 +37,54 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
-                                    <th v-if="current_permissions.has('departments-update') || current_permissions.has('departments-delete')">Actions</th>
+                                    <th>Title</th>
+                                    <th>Priority</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Description</th>
+                                    <th>Assign To</th>
+                                    <th v-if="current_permissions.has('tasks-update') || current_permissions.has('tasks-delete')">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- <tr v-for="(department, index) in departments.data" :key="index">
+                                <tr v-for="(task, index) in tasks.data" :key="index">
                                     <td>{{ index + 1 }}</td>
-                                    <td>{{ department.name }}</td>
-                                    <td v-if="current_permissions.has('departments-update') || current_permissions.has('departments-delete')">
-                                        <button class="btn btn-success mx-1" v-on:click="editDepartment(department)">
+                                    <td>{{ task.title }}</td>
+                                    <td>
+                                        <span :class="`badge ${task.priority == 'Urgent' ? 'badge-danger' : 'badge-success'}`">
+                                            {{ task.priority }}
+                                        </span>
+                                    </td>
+                                    <td>{{ task.start_date }}</td>
+                                    <td>{{ task.end_date }}</td>
+                                    <td>
+                                        {{ task.description.length <= 10 ? task.description : task.
+                                        description.substr(0, 10) + '...'}}
+                                    </td>
+                                    <td>{{ task.users.length }} Staff Members</td>
+                                    <td v-if="current_permissions.has('tasks-update') || current_permissions.has('tasks-delete')">
+                                        <button class="btn btn-success mx-1" v-on:click="editTask(task)">
                                             <i class="fa fa-edit"></i></button>
 
-                                        <button class="btn btn-danger mx-1" v-on:click="deleteDepartment(department)">
+                                        <button class="btn btn-danger mx-1" v-on:click="deleteTask(task)">
                                             <i class="fa fa-trash"></i></button>
                                     </td>
-                                </tr> -->
+                                </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- <div class="d-flex justify-content-center" v-if="departmentLinks.length > 3">
+                    <div class="d-flex justify-content-center" v-if="tasksLinks.length > 3">
 
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li :class="`page-item ${link.active ? 'active': ''} ${ !link.url ? 'disabled': ''}`"
-                                v-for="(link, index) in departmentLinks" :key="index"><a class="page-link" href="#" v-html="link.label"
+                                v-for="(link, index) in tasksLinks" :key="index"><a class="page-link" href="#" v-html="link.label"
                                 @click.prevent="getResults(link)"></a></li>
                                 
                             </ul>
                         </nav>
-                    </div> -->
+                    </div>
 
 
                     <!-- Modal -->
@@ -149,7 +167,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" @click="!editMode ? storeTask() : updateDepartment()"
+                                    <button type="button" @click="!editMode ? storeTask() : updateTask()"
                                         class="btn btn-success">
                                         {{ !editMode ? 'Store' : 'Save Changes' }}
                                     </button>
@@ -206,11 +224,16 @@ export default {
         },
         filtered_users(){
             return this.$store.getters.filtered_users
-        }
         },
         tasks(){
             return this.$store.getters.tasks
         },
+        tasksLinks(){
+            return this.$store.getters.tasksLinks
+        },
+
+        },
+       
 
     methods: {
         createTask() {
@@ -224,6 +247,57 @@ export default {
             this.$store.dispatch('storeTask', this.taskData)
 
         },
+        getResults(link) {
+            if(!link.url || link.active){
+                return;
+            } else{
+                this.$store.dispatch('getTasksResults', link)
+            }
+
+        },
+
+        editTask(task) {
+            this.editMode = true
+            this.taskData.reset()
+            this.taskData.clear()
+
+            this.taskData.id = task.id
+            this.taskData.title = task.title
+            this.taskData.priority = task.priority
+            this.taskData.start_date = task.start_date
+            this.taskData.end_date = task.end_date
+            this.taskData.description = task.description
+
+            task.users.forEach( user => {
+                this.taskData.assign_to.push(user.id);
+            });
+
+            $('#exampleModal').modal('show')
+        },
+
+        updateTask()
+        {
+            this.$store.dispatch('updateTask', this.taskData)
+
+        },
+
+        deleteTask(task) {
+
+        Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+        if (result.isConfirmed) {
+            this.$store.dispatch('deleteTask', task)
+        }
+        });
+},
+
     }
 
 }

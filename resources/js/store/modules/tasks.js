@@ -2,18 +2,17 @@ import axios from 'axios';
 
 export default {
     state: {
-        // //departments_test: 0,
-        // departments: {},
-        // departmentLinks : {},
-
+        tasks: {},
+        tasksLinks: [],
     },
-
 
     getters: {
         tasks(state) {
             return state.tasks
         },
-      
+        tasksLinks(state) {
+            return state.tasksLinks
+        },
     },
 
 
@@ -21,8 +20,24 @@ export default {
         set_tasks: (state, data) => {
             state.tasks = data
 
+            state.tasksLinks = [];
+
+            for(let i=0; i < data.links.length; i++)
+            {
+                if(i === 1
+                    || i === Number(data.links.length - 2)
+                    || data.links[i].active 
+                    || isNaN(data.links[i].label)
+                    || Number(data.links[i].label) === Number(data.current_page + 1)
+                    || Number(data.links[i].label) === Number(data.current_page - 1)
+                    ){
+                        state.tasksLinks.push(data.links[i]);
+                    }
+            }
+
    
     },
+},
 
 
     actions:{
@@ -38,16 +53,16 @@ export default {
         //     })
         // },
 
-        // getDepartmentsResults: (context, data) => {
-        //     axios.get(`${data.link.url}&${data.searchData.search_type}=${data.searchData.search_value}`).then((response) => {
-        //         context.commit('set_departments', response.data)
-        //         console.log(response.data)                
-        // })
-        // },
+        getTasksResults: (context, link) => {
+            axios.get(link.url).then((response) => {
+                context.commit('set_tasks', response.data)
+        })
+        },
 
         storeTask: (context, taskData) => {
             taskData.post(window.url + 'api/storeTask')
             .then((response) => {
+                context.dispatch('getTasks'),
                 $('#exampleModal').modal('hide')
 
                 window.Toast.fire({
@@ -64,30 +79,30 @@ export default {
 
         },
 
-        // updateDepartment(context, departmentData) {
+        updateTask(context, taskData) {
 
-        //     departmentData.post(window.url + 'api/updateDepartment/' + departmentData.id)
-        //     .then((response) => {
-        //     context.dispatch('getDepartments')  ,
-        //    $('#exampleModal').modal('hide')
-        //    window.Toast.fire({
-        //     icon: "success",
-        //     title: "Department updated successfully!"
-        //   });
-        //  })
+            taskData.post(window.url + 'api/updateTask/' + taskData.id)
+            .then((response) => {
+            context.dispatch('getTasks')  ,
+           $('#exampleModal').modal('hide')
+           window.Toast.fire({
+            icon: "success",
+            title: "Task updated successfully!"
+          });
+         })
 
-        // },
+        },
 
-        // deleteDepartment(context, departmentData) {
-        //         axios.post(window.url + 'api/deleteDepartment/' + departmentData.id)
-        //             .then(() => {
-        //                 context.dispatch('getDepartments')
-        //                 window.Toast.fire({
-        //                     icon: "success",
-        //                     title: "Department deleted successfully!"
-        //                   });
-        //             });
+        deleteTask(context, taskData) {
+                axios.post(window.url + 'api/deleteTask/' + taskData.id)
+                    .then(() => {
+                        context.dispatch('getTasks')
+                        window.Toast.fire({
+                            icon: "success",
+                            title: "Task deleted successfully!"
+                          });
+                    });
             
-        // }
+        }
     },
 }

@@ -57,6 +57,9 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
     Route::controller(TaskController::class)->group(function() {
 
         Route::post('storeTask', 'storeTask')->middleware('permission:tasks-create');
+        Route::get('getTasks', 'getTasks')->middleware('permission:tasks-read');
+        Route::post('updateTask/{id}', 'updateTask')->middleware('permission:tasks-update');
+        Route::post('deleteTask/{id}', 'deleteTask')->middleware('permission:tasks-delete');
 
     });
     
