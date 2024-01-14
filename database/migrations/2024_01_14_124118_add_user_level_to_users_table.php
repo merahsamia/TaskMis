@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('department_id')->after('id')->default('0');
+            $table->integer('user_level')->after('department_id')->default('0');
         });
     }
 
@@ -26,7 +26,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('department_id');
+            $table->dropColumn('user_level');
+
         });
     }
 };
