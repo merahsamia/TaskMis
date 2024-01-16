@@ -60,11 +60,14 @@ class UserController extends Controller
                 $user_level = 0;
 
             }
-        }
+            }else {
+                $user_level = 0;
+
+            }
 
         $user = User::create([
             'department_id'  => $department_id,
-            'user_level'  => $user_level,
+            'user_level'     => $user_level,
             'name'           => $request->name,
             'email'          => $request->email,
             'password'       => Hash::make($request->password),
@@ -130,10 +133,14 @@ class UserController extends Controller
                 $user_level = 0;
 
             }
+        }else {
+            $user_level = 0;
+
         }
         
         User::where('id',$id)->update([
             'department_id'  => $department_id,
+            'user_level'  => $user_level,
             'name'           => $request->name,
             'email'          => $request->email,
             'password'       => $password,
