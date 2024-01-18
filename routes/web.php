@@ -80,6 +80,7 @@ Route::middleware(['auth'])->group(function() {
 
     Route::controller(TaskController::class)->group(function() {
         Route::get('tasks/index', 'tasksIndex')->name('tasksIndex')->middleware('permission:tasks-read');
+        Route::get('tasks/inbox', 'tasksInbox')->name('tasksInbox')->middleware('permission:inbox-read');
 
     });
 

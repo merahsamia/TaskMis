@@ -66,10 +66,12 @@
                         <a href="{{route('tasksIndex')}}">Assigned Tasks</a>
                     </li>
                     @endcan
+                    @can('inbox-read')
 
-                    <li>
-                        <a href="#">Tasks Inbox</a>
+                    <li class="{{  Request::is('tasks/inbox') ? 'active' : ''}}">
+                        <a href="{{route('tasksInbox')}}">Inbox Tasks</a>
                     </li>
+                    @endcan
 
                 </ul>
 
@@ -96,6 +98,10 @@
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" id="navbarCollapse">
                         <i class="fa fa-bars"></i>
                     </button>
+                    <span class="ml-3">
+                        Account: {{Auth::user()->name}}
+
+                    </span>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">

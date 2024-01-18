@@ -8,6 +8,7 @@ import Departments from './components/Departments.vue'
 import Users from './components/Users/Users.vue'
 import PermissionsCreate from './components/permissions/PermissionsCreate.vue'
 import Tasks from './components/tasks/Tasks.vue'
+import Inbox from './components/tasks/Inbox.vue'
 
 import Form from 'vform'
 window.Form = Form;
@@ -40,6 +41,7 @@ app.component('departments', Departments);
 app.component('permissions-create', PermissionsCreate);
 app.component('users', Users);
 app.component('tasks', Tasks);
+app.component('inbox', Inbox);
 
 window.url = '/TaskMis/'
 
