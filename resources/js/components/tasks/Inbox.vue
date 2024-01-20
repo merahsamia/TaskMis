@@ -61,8 +61,8 @@
                                     </td>
                                     <td>{{ task.users.length }} Staff Members</td>
                                     <td v-if="current_permissions.has('inbox-update')">
-                                        <button class="btn btn-success mx-1" v-on:click="editTask(task)">
-                                            <i class="fa fa-edit"></i></button>
+                                        <button class="btn btn-success mx-1" v-on:click="performTask(task)">
+                                            <i class="fa fa-check"></i></button>
 
                                     </td>
                                 </tr>
@@ -82,7 +82,202 @@
                         </nav>
                     </div>
 
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">
+                                        {{ !editMode ? 'Create Task' : 'Perform Task' }}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row my-2">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-header bg-light">
+                                                    <h5>Task Information</h5>
+                                                </div>
 
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <div class="table">
+                                                            <tr>
+                                                                <th style="width: 20%;">Title</th>
+                                                                <td>{{ taskInfo.title }}</td>
+                                                
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 20%;">Priority</th>
+                                                                <td>
+                                                                    <span :class="`badge ${taskInfo.priority == 'Urgent' ? 'bg-danger' : 'bg-success'}`">
+                                                                        {{ taskInfo.priority }}
+                                                                    </span>    
+                                                                </td>
+                                                
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 20%;">Start date</th>
+                                                                <td>{{ taskInfo.start_date }}</td>
+                                                
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 20%;">End date</th>
+                                                                <td>{{ taskInfo.end_date }}</td>
+                                                
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 20%;">Description</th>
+                                                                <td>{{ taskInfo.description }}</td>
+                                                
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 20%;">Assigned To</th>
+                                                                <td>
+                                                                    <span :class="`badge bg-dark mx-1`" v-for="
+                                                                    (user, index) in taskInfo.users" :key="index">
+                                                                        {{ user.name }}
+                                                                    </span>    
+                                                                </td>
+                                                
+                                                            </tr>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-2" v-if="performMode">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-header bg-light">
+                                                    <h5>Perform Task</h5>
+                
+                                                </div>
+
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="result">Result</label>
+                                                                <textarea class="form-control" rows="3"
+                                                                v-model="performTaskData.result"></textarea>
+                                                                <div class="text-danger" v-if="performTaskData.errors.has
+                                                                ('result')" v-html="performTaskData.errors.get('result')" />
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-7">
+                                                            <div class="form-group">
+                                                                <label for="progress">Progress</label><br>
+                                                                <input type="range" class="taskRange" min="0"
+                                                                max="100" v-model="performTaskData.progress">
+                                                                <span class="rangeValue">{{ performTaskData.progress }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="status">Status</label>
+                                                            <p v-if="performTaskData.progress == 0">No progress</p>
+                                                            <p v-if="performTaskData.progress > 0 &&
+                                                                performTaskData.progress < 100">Under progress</p>
+                                                            <p v-if="performTaskData.progress == 100">Completed</p>
+                                                        </div>
+                                                        <div class="col-md">
+                                                            <div class="form-group">
+                                                                <label for="file">File</label>
+                                                                <input type="file" class="form-control"
+                                                                 @change="getPerformTaskFile($event)">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="title">Title</label>
+                                                <input type="text" class="form-control" 
+                                                    v-model="taskData.title">
+                                                    <div class="text-danger" v-if="taskData.errors.has('title')" v-html="taskData.errors.get('title')" />
+
+                                                </div>
+                                            </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="priority">Priority</label>
+                                                <select class="form-control" v-model="taskData.priority">
+                                                    <option value="Urgent">Urgent</option>
+                                                    <option value="Not Urgent">Not Urgent</option>
+                                                </select>
+                                                    <div class="text-danger" v-if="taskData.errors.has('priority')" v-html="taskData.errors.get('priority')" />
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="start_date">Start Date</label>
+                                                <input type="date" class="form-control" 
+                                                    v-model="taskData.start_date">
+                                                    <div class="text-danger" v-if="taskData.errors.has('start_date')" v-html="taskData.errors.get('start_date')" />
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="end_date">End Date</label>
+                                                <input type="date" class="form-control" 
+                                                    v-model="taskData.end_date">
+                                                    <div class="text-danger" v-if="taskData.errors.has('end_date')" v-html="taskData.errors.get('end_date')" />
+
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="description">description</label>
+                                                <textarea rows="13" class="form-control" v-model="taskData.description"></textarea>
+                                                    <div class="text-danger" v-if="taskData.errors.has('description')" v-html="taskData.errors.get('description')" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="assign_to">Assign to</label>
+                                                <multi-select :options="filtered_users" 
+                                                v-model="taskData.assign_to" 
+                                                :searchable="true" mode="tags"></multi-select>
+
+                                                <div class="text-danger" v-if="taskData.errors.has('assign_to')" v-html="taskData.errors.get('assign_to')" />
+
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" @click="!editMode ? storeTask() : updateTask()"
+                                        class="btn btn-success">
+                                        {{ !editMode ? 'Store' : 'Save Changes' }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                    
 
                 </div>
@@ -115,19 +310,20 @@ export default {
                 search_value:'',
             },
 
+            taskInfo: {},
+            performMode: false,
+
+            performTaskData: new Form({
+                id: '',
+                task_info: {},
+                result: '',
+                progress: 0,
+                file:'',
+            })
+
         }
     },
 
-    methods: {
-        getResults(link) {
-            if(!link.url || link.active){
-                return;
-            } else{
-                this.$store.dispatch('getInboxTasksResults', link)
-            }
-
-        },
-    },
 
     mounted(){
         this.$store.dispatch('getAuthRolesAndPermissions')
@@ -149,6 +345,30 @@ export default {
             return this.$store.getters.inboxTaskLinks
         },
 
+    },
+
+
+    methods: {
+        getResults(link) {
+            if(!link.url || link.active){
+                return;
+            } else{
+                this.$store.dispatch('getInboxTasksResults', link)
+            }
+
         },
+
+        performTask(task){
+            this.editMode = true
+            this.taskInfo = task
+            this.performMode = true
+
+            $('#exampleModal').modal('show')
+        },
+
+        getPerformTaskFile(event){
+
+        },
+    },
 }
 </script>

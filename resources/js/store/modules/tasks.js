@@ -146,7 +146,7 @@ export default {
 
         getInboxTasksResults: (context, link) => {
             axios.get(link.url).then((response) => {
-                context.commit('set_tasks', response.data)
+                context.commit('set_inbox_tasks', response.data)
         })
         
         },
