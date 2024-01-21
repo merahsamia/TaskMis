@@ -193,8 +193,13 @@
                                                         <div class="col-md">
                                                             <div class="form-group">
                                                                 <label for="file">File</label>
-                                                                <input type="file" class="form-control"
+                                                                <input type="file" class="form-control" id="task_file"
                                                                  @change="getPerformTaskFile($event)">
+                                                                 <span>
+                                                                    {{ taskInfo.file ? 'Already uploaded a file!' : 'No file uploaded yet!' }}
+                                                                 </span> <br>
+                                                                 <span v-if="taskInfo.file">
+                                                                File name: {{ taskInfo.file }}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -363,11 +368,14 @@ export default {
             this.taskInfo = task
             this.performMode = true
 
+            this.performTaskData.result = task.result
+            this.performTaskData.progress = task.progress
+
             $('#exampleModal').modal('show')
         },
 
         getPerformTaskFile(event){
-
+            
         },
     },
 }
