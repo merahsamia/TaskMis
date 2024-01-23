@@ -151,5 +151,19 @@ export default {
         
         },
 
+        storePerformTask:(context, data) => {
+            axios.post(window.url + 'api/storePerformTask', data.storePerformTaskData, data.config)
+            .then((response) => {
+                context.dispatch('getInboxTasks'),
+                $('#exampleModal').modal('hide')
+                $('#task_file').val('')
+
+                window.Toast.fire({
+                    icon: "success",
+                    title: "Task created successfully!"
+                  });
+            })
+        }
+
     },
 }

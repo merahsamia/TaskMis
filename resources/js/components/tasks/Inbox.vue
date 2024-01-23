@@ -167,8 +167,6 @@
                                                                 <label for="result">Result</label>
                                                                 <textarea class="form-control" rows="3"
                                                                 v-model="performTaskData.result"></textarea>
-                                                                <div class="text-danger" v-if="performTaskData.errors.has
-                                                                ('result')" v-html="performTaskData.errors.get('result')" />
 
                                                             </div>
                                                         </div>
@@ -275,9 +273,9 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" @click="!editMode ? storeTask() : updateTask()"
+                                    <button type="button" @click="storePerformTask"
                                         class="btn btn-success">
-                                        {{ !editMode ? 'Store' : 'Save Changes' }}
+                                         Save Changes
                                     </button>
                                 </div>
                             </div>
@@ -318,13 +316,13 @@ export default {
             taskInfo: {},
             performMode: false,
 
-            performTaskData: new Form({
+            performTaskData: {
                 id: '',
                 task_info: {},
                 result: '',
                 progress: 0,
                 file:'',
-            })
+            }
 
         }
     },
@@ -375,8 +373,22 @@ export default {
         },
 
         getPerformTaskFile(event){
-            
+            this.performTaskData.file = event.target.files[0]
         },
+
+        storePerformTask(){
+            const config = {headers: {'content-type': 'multipart/form-data'}};
+
+            let formData = new FormData();
+
+            formData.append('task_id', this.taskInfo.id);
+            formData.append('result', this.performTaskData.result);
+            formData.append('progress', this.performTaskData.progress);
+            formData.append('file', this.performTaskData.file);
+
+            this.$store.dispatch('storePerformTask', {performTaskData: formData, config: config})
+           
+        }
     },
 }
 </script>
