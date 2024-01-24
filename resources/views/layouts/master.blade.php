@@ -146,7 +146,7 @@
     </div>
 
   @auth
-  <script>
+    <script>
         window.token = {!! json_encode(session()->get('token'))!!}
 
         window.auth_user = {!!json_encode(auth()->user()) !!};
