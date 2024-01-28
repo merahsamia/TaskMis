@@ -94,6 +94,47 @@ class TaskController extends Controller
 
     }
 
+    public function storePerformTask(Request $request)
+    {
+        $task = Task::findOrFail($request->task_id);
+        if($request->progress == 100) {
+            $performed_by = auth('api')->user()->id;
+            $status= 1;
+
+        }else {
+            $performed_by = 0;
+            $status= 0;
+        }
+
+        if($request->file){
+            if($task->file) {
+                unlink(public_path('tasks/' . $task->file));
+            }
+
+            $upload_path = public_path('tasks');
+            $extension = $request->file->getClientOriginalExtension();
+            $file_name = time().'.'.$extension;
+            $request->file->move($upload_path, $file_name);
+
+            $file = $file_name;
+
+        } else {
+            $file = $task->file;
+        }
+
+
+        Task::where('id', $request->task_id)->update([
+            'performed_by'   => $performed_by,
+            'result'         => $result,
+            'progress'       => $progress,
+            'file'           => $file,
+            'status'         => $status,
+        ]);
+
+        return response()->json('success');
+
+    }
+
 
   
 }
