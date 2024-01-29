@@ -42,7 +42,7 @@ class TaskController extends Controller
     public function getTasks()
     {
         $user_id = auth('api')->user()->id;
-        return response()->json(Task::where('user_id', $user_id)->with('users')->latest()->paginate(2));
+        return response()->json(Task::where('user_id', $user_id)->with('users')->with('performed_by_user')->latest()->paginate(2));
 
     }
 
@@ -113,7 +113,7 @@ class TaskController extends Controller
 
             $upload_path = public_path('tasks');
             $extension = $request->file->getClientOriginalExtension();
-            $file_name = time().'.'.$extension;
+            $file_name = time() . '.' . $extension;
             $request->file->move($upload_path, $file_name);
 
             $file = $file_name;
@@ -125,8 +125,8 @@ class TaskController extends Controller
 
         Task::where('id', $request->task_id)->update([
             'performed_by'   => $performed_by,
-            'result'         => $result,
-            'progress'       => $progress,
+            'result'         => $request->result,
+            'progress'       => $request->progress,
             'file'           => $file,
             'status'         => $status,
         ]);

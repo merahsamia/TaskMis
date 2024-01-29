@@ -152,7 +152,7 @@ export default {
         },
 
         storePerformTask:(context, data) => {
-            axios.post(window.url + 'api/storePerformTask', data.storePerformTaskData, data.config)
+            axios.post(window.url + 'api/storePerformTask', data.performTaskData, data.config)
             .then((response) => {
                 context.dispatch('getInboxTasks'),
                 $('#exampleModal').modal('hide')

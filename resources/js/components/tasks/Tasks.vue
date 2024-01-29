@@ -63,6 +63,9 @@
                                     </td>
                                     <td>{{ task.users.length }} Staff Members</td>
                                     <td v-if="current_permissions.has('tasks-update') || current_permissions.has('tasks-delete')">
+                                        <button class="btn btn-info mx-1" v-on:click="showTask(task)">
+                                            <i class="fa fa-info"></i></button>
+
                                         <button class="btn btn-success mx-1" v-on:click="editTask(task)">
                                             <i class="fa fa-edit"></i></button>
 
@@ -93,13 +96,19 @@
                         <div class="modal-dialog modal-xl modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">
+                                    <h5 class="modal-title" id="exampleModalLabel" v-if="!showMode">
                                         {{ !editMode ? 'Create Task' : 'Update Task' }}
                                     </h5>
+
+                                    <h5 class="modal-title" id="exampleModalLabel" v-if="showMode">
+                                        Show Task
+                                    </h5>
+
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
+
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body" v-if="!showMode">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
@@ -165,10 +174,15 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="modal-body" v-if="showMode">
+                                        <Show :taskInfo="taskInfo"/>
+                                </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" @click="!editMode ? storeTask() : updateTask()"
-                                        class="btn btn-success">
+                                        class="btn btn-success" v-if="!showMode">
                                         {{ !editMode ? 'Store' : 'Save Changes' }}
                                     </button>
                                 </div>
@@ -185,10 +199,17 @@
 </template>
 
 <script>
+import Show from './Show.vue';
+
 export default {
+
+    components: {
+    Show
+    },
 
     data() {
         return {
+
             taskData: new Form( {
                 id: '',
                 title: '',
@@ -198,7 +219,13 @@ export default {
                 description: '',
                 assign_to: [],
             }),
+
             editMode: false,
+
+            showMode: false,
+
+            taskInfo : {},
+
 
           
             searchData: {
@@ -215,19 +242,25 @@ export default {
         this.$store.dispatch('getTasks')
 
     },
+
     computed: {
+
         current_roles(){
             return this.$store.getters.current_roles
         },
+
         current_permissions(){
             return this.$store.getters.current_permissions
         },
+
         filtered_users(){
             return this.$store.getters.filtered_users
         },
+
         tasks(){
             return this.$store.getters.tasks
         },
+
         tasksLinks(){
             return this.$store.getters.tasksLinks
         },
@@ -238,6 +271,8 @@ export default {
     methods: {
         createTask() {
             this.editMode = false
+            this.showMode = false
+
             this.taskData.reset()
             this.taskData.clear()
             $('#exampleModal').modal('show')
@@ -247,6 +282,7 @@ export default {
             this.$store.dispatch('storeTask', this.taskData)
 
         },
+
         getResults(link) {
             if(!link.url || link.active){
                 return;
@@ -258,6 +294,8 @@ export default {
 
         editTask(task) {
             this.editMode = true
+            this.showMode = false
+
             this.taskData.reset()
             this.taskData.clear()
 
@@ -283,20 +321,29 @@ export default {
 
         deleteTask(task) {
 
-        Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-        if (result.isConfirmed) {
-            this.$store.dispatch('deleteTask', task)
+            Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+            if (result.isConfirmed) {
+                this.$store.dispatch('deleteTask', task)
+            }
+            });
+        },
+
+        showTask(task)
+        {
+            this.showMode = true
+            this.taskInfo = task
+
+            $('#exampleModal').modal('show')
+
         }
-        });
-},
 
     }
 

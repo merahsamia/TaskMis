@@ -4,9 +4,8 @@
             <div class="card">
                 <div class="card-header bg-dark">
                     <h5 class="float-start text-light">Inbox Tasks List</h5>
-                   
-
                 </div>
+
                 <div class="card-body">
                                         <!-- 
 
@@ -103,50 +102,7 @@
                                                 </div>
 
                                                 <div class="card-body">
-                                                    <div class="table-responsive">
-                                                        <div class="table">
-                                                            <tr>
-                                                                <th style="width: 20%;">Title</th>
-                                                                <td>{{ taskInfo.title }}</td>
-                                                
-                                                            </tr>
-                                                            <tr>
-                                                                <th style="width: 20%;">Priority</th>
-                                                                <td>
-                                                                    <span :class="`badge ${taskInfo.priority == 'Urgent' ? 'bg-danger' : 'bg-success'}`">
-                                                                        {{ taskInfo.priority }}
-                                                                    </span>    
-                                                                </td>
-                                                
-                                                            </tr>
-                                                            <tr>
-                                                                <th style="width: 20%;">Start date</th>
-                                                                <td>{{ taskInfo.start_date }}</td>
-                                                
-                                                            </tr>
-                                                            <tr>
-                                                                <th style="width: 20%;">End date</th>
-                                                                <td>{{ taskInfo.end_date }}</td>
-                                                
-                                                            </tr>
-                                                            <tr>
-                                                                <th style="width: 20%;">Description</th>
-                                                                <td>{{ taskInfo.description }}</td>
-                                                
-                                                            </tr>
-                                                            <tr>
-                                                                <th style="width: 20%;">Assigned To</th>
-                                                                <td>
-                                                                    <span :class="`badge bg-dark mx-1`" v-for="
-                                                                    (user, index) in taskInfo.users" :key="index">
-                                                                        {{ user.name }}
-                                                                    </span>    
-                                                                </td>
-                                                
-                                                            </tr>
-
-                                                        </div>
-                                                    </div>
+                                                    <Show :taskInfo="taskInfo"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -284,6 +240,7 @@
                    
 
                 </div>
+
             </div>
         </div>
 
@@ -292,7 +249,12 @@
 </template>
 
 <script>
+
+import Show from './Show.vue';
 export default {
+    components: {
+        Show,
+    },
 
     data() {
         return {
