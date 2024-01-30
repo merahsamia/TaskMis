@@ -73,6 +73,13 @@
                     </li>
                     @endcan
 
+                    @can('completed-read')
+
+                    <li class="{{  Request::is('tasks/completed') ? 'active' : ''}}">
+                        <a href="{{route('tasksCompleted')}}">Completed Tasks</a>
+                    </li>
+                    @endcan
+
                 </ul>
 
                 <div class="footer">

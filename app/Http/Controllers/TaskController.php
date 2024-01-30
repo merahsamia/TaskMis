@@ -136,5 +136,20 @@ class TaskController extends Controller
     }
 
 
+    public function tasksCompleted()
+    {
+        return view('tasks.completed');
+
+    }
+
+
+    public function getCompletedTasks()
+    {
+        $tasks = auth('api')->user()->tasks()->where('status', '1')->latest()->paginate(10);
+        return response()->json($tasks);
+
+    }
+
+
   
 }

@@ -3,7 +3,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-dark">
-                    <h5 class="float-start text-light">Inbox Tasks List</h5>
+                    <h5 class="float-start text-light">
+                        {{ page_type =='inbox' ? 'Inbox Tasks List' : 'Completed Tasks List'}}
+                    </h5>
                 </div>
 
                 <div class="card-body">
@@ -266,6 +268,8 @@ export default {
                 end_date: '',
                 description: '',
                 assign_to: [],
+
+                page_type: '',
             }),
             editMode: false,
 
@@ -293,6 +297,18 @@ export default {
     mounted(){
         this.$store.dispatch('getAuthRolesAndPermissions')
         this.$store.dispatch('getInboxTasks')
+        this.$store.dispatch('getCompletedTasks')
+
+        if(window.location.href.indexOf("tasks/inbox") > -1) {
+            //console.log('inbox')
+            this.page_test = 'inbox'
+
+        } else {
+            //console.log('completed')
+            this.page_test = 'completed'
+
+
+        }
 
     },
     computed: {
@@ -308,6 +324,14 @@ export default {
         },
         inboxTaskLinks(){
             return this.$store.getters.inboxTaskLinks
+        },
+
+        completed_tasks(){
+            return this.$store.getters.completed_tasks
+        },
+
+        completedTaskLinks(){
+            return this.$store.getters.completedTaskLinks
         },
 
     },

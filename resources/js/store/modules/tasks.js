@@ -6,6 +6,8 @@ export default {
         tasksLinks: [],
         inbox_tasks: {},
         inboxTaskLinks: [],
+        completed_tasks: {},
+        completedTaskLinks: [],
     },
 
     getters: {
@@ -22,6 +24,13 @@ export default {
         },
         inboxTaskLinks(state) {
             return state.inboxTaskLinks
+        },
+
+        completed_tasks(state) {
+            return state.completed_tasks
+        },
+        completedTaskLinks(state) {
+            return state.completedTaskLinks
         },
     },
 
@@ -63,6 +72,28 @@ export default {
                     || Number(data.links[i].label) === Number(data.current_page - 1)
                     ){
                         state.inboxTaskLinks.push(data.links[i]);
+                    }
+            }
+
+   
+    },
+
+        set_completed_tasks: (state, data) => {
+            state.completed_tasks = data
+            //console.log(data)
+
+            state.completedTaskLinks = [];
+
+            for(let i=0; i < data.links.length; i++)
+            {
+                if(i === 1
+                    || i === Number(data.links.length - 2)
+                    || data.links[i].active 
+                    || isNaN(data.links[i].label)
+                    || Number(data.links[i].label) === Number(data.current_page + 1)
+                    || Number(data.links[i].label) === Number(data.current_page - 1)
+                    ){
+                        state.completedTaskLinks.push(data.links[i]);
                     }
             }
 
@@ -163,7 +194,15 @@ export default {
                     title: "Task performance stored successfully!"
                   });
             })
-        }
+        },
+
+
+        getCompletedTasks: (context) => {
+            axios.get(`${window.url}api/getCompletedTasks`).then((response) => {
+                context.commit('set_completed_tasks', response.data)
+            })
+        
+        },
 
     },
 }
