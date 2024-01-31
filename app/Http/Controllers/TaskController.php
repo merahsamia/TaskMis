@@ -139,7 +139,6 @@ class TaskController extends Controller
     public function tasksCompleted()
     {
         return view('tasks.completed');
-
     }
 
 

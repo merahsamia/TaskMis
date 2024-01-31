@@ -186,6 +186,7 @@ export default {
             axios.post(window.url + 'api/storePerformTask', data.performTaskData, data.config)
             .then((response) => {
                 context.dispatch('getInboxTasks'),
+                context.dispatch('getCompletedTasks'),
                 $('#exampleModal').modal('hide')
                 $('#task_file').val('')
 

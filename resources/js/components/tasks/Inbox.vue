@@ -45,7 +45,7 @@
                                     <th v-if="current_permissions.has('inbox-update')">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody v-if="page_type == 'inbox'">
                                 <tr v-for="(task, index) in inbox_tasks.data" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ task.title }}</td>
@@ -61,7 +61,44 @@
                                         description.substr(0, 10) + '...'}}
                                     </td>
                                     <td>{{ task.users.length }} Staff Members</td>
-                                    <td v-if="current_permissions.has('inbox-update')">
+                                    <td> 
+                                        <p v-if="task.progress == 0" class="text-danger">No Progress</p>
+                                        <p v-if="task.progress > 0 && task.progress < 100" class="text-warning">Under Progress</p>
+                                        <p v-if="task.progress == 100" class="text-success">Completed</p>
+                                    </td>
+
+                                    <td v-if="current_permissions.has('inbox-update') || current_permissions.has('completed-update') ">
+                                        <button class="btn btn-success mx-1" v-on:click="performTask(task)">
+                                            <i class="fa fa-check"></i></button>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                            <tbody v-if="page_type == 'completed'">
+                                <tr v-for="(task, index) in completed_tasks.data" :key="index">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ task.title }}</td>
+                                    <td>
+                                        <span :class="`badge ${task.priority == 'Urgent' ? 'badge-danger' : 'badge-success'}`">
+                                            {{ task.priority }}
+                                        </span>
+                                    </td>
+                                    <td>{{ task.start_date }}</td>
+                                    <td>{{ task.end_date }}</td>
+                                    <td>
+                                        {{ task.description.length <= 10 ? task.description : task.
+                                        description.substr(0, 10) + '...'}}
+                                    </td>
+                                    <td>{{ task.users.length }} Staff Members</td>
+
+                                    <td> 
+                                        <p v-if="task.progress == 0" class="text-danger">No Progress</p>
+                                        <p v-if="task.progress > 0 && task.progress < 100" class="text-warning">Under Progress</p>
+                                        <p v-if="task.progress == 100" class="text-success">Completed</p>
+                                    </td>
+
+                                    <td v-if="current_permissions.has('completed-update')">
                                         <button class="btn btn-success mx-1" v-on:click="performTask(task)">
                                             <i class="fa fa-check"></i></button>
 
@@ -71,12 +108,24 @@
                         </table>
                     </div>
 
-                    <div class="d-flex justify-content-center" v-if="inboxTaskLinks.length > 3">
+                    <div class="d-flex justify-content-center" v-if="page_type =='inbox' && inboxTaskLinks.length > 3">
 
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li :class="`page-item ${link.active ? 'active': ''} ${ !link.url ? 'disabled': ''}`"
                                 v-for="(link, index) in inboxTaskLinks" :key="index"><a class="page-link" href="#" v-html="link.label"
+                                @click.prevent="getResults(link)"></a></li>
+                                
+                            </ul>
+                        </nav>
+                    </div>
+
+                    <div class="d-flex justify-content-center" v-if="page_type =='completed' && completedTaskLinks.length > 3">
+
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li :class="`page-item ${link.active ? 'active': ''} ${ !link.url ? 'disabled': ''}`"
+                                v-for="(link, index) in completedTaskLinks" :key="index"><a class="page-link" href="#" v-html="link.label"
                                 @click.prevent="getResults(link)"></a></li>
                                 
                             </ul>
@@ -301,11 +350,11 @@ export default {
 
         if(window.location.href.indexOf("tasks/inbox") > -1) {
             //console.log('inbox')
-            this.page_test = 'inbox'
+            this.page_type = 'inbox'
 
         } else {
             //console.log('completed')
-            this.page_test = 'completed'
+            this.page_type = 'completed'
 
 
         }
