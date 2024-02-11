@@ -182,11 +182,21 @@ export default {
         
         },
 
+        getCompletedTasksResults: (context, link) => {
+            axios.get(link.url).then((response) => {
+                context.commit('set_completed_tasks', response.data)
+        })
+        
+        },
+
         storePerformTask:(context, data) => {
             axios.post(window.url + 'api/storePerformTask', data.performTaskData, data.config)
             .then((response) => {
-                context.dispatch('getInboxTasks'),
-                context.dispatch('getCompletedTasks'),
+                if(window.location.href.indexOf("tasks/inbox") > -1) {
+                    context.dispatch('getInboxTasks')
+                }else {
+                    context.dispatch('getCompletedTasks')
+                }
                 $('#exampleModal').modal('hide')
                 $('#task_file').val('')
 

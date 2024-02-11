@@ -89,7 +89,7 @@ class TaskController extends Controller
 
     public function getInboxTasks()
     {
-        $tasks = auth('api')->user()->tasks()->where('status', '0')->latest()->paginate(10);
+        $tasks = auth('api')->user()->tasks()->where('status', '0')->latest()->paginate(1);
         return response()->json($tasks);
 
     }
@@ -144,7 +144,7 @@ class TaskController extends Controller
 
     public function getCompletedTasks()
     {
-        $tasks = auth('api')->user()->tasks()->where('status', '1')->latest()->paginate(10);
+        $tasks = auth('api')->user()->tasks()->where('status', '1')->latest()->paginate(1);
         return response()->json($tasks);
 
     }
