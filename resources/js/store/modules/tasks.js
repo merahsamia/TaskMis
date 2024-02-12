@@ -124,7 +124,14 @@ export default {
         storeTask: (context, taskData) => {
             taskData.post(window.url + 'api/storeTask')
             .then((response) => {
-                context.dispatch('getTasks'),
+
+                if(window.location.href.indexOf("tasks/index") > -1) {
+                    context.dispatch('getTasks')
+                    
+                } else {
+                    context.dispatch('getInboxTasks')
+                }
+
                 $('#exampleModal').modal('hide')
 
                 window.Toast.fire({
