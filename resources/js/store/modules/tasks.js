@@ -178,6 +178,8 @@ export default {
         getInboxTasks: (context) => {
             axios.get(`${window.url}api/getInboxTasks`).then((response) => {
                 context.commit('set_inbox_tasks', response.data)
+
+               // console.log(response.data)
             })
         
         },

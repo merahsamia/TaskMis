@@ -25,7 +25,7 @@ export default {
                 }).join(''));
 
                 let tokenData = JSON.parse(jsonPayload);
-                console.log(tokenData)
+                //console.log(tokenData)
                 return tokenData;            }
         }
     

@@ -234,7 +234,6 @@
                                         </div>
                                         
                                     </div>
-
                                     <div class="row" v-if="subTasksMode">
                                         <div class="col-md-12">
                                             <div class="form-group">
@@ -264,6 +263,42 @@
                                             <button class="btn btn-success" @click="storeSubTask">
                                                 Create Sub Task
                                             </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" v-if="subTasksMode">
+                                        <div class="col-md-12">
+                                            <div class="card mt-3">
+                                                <div class="card-header">
+                                                    <h5>Sub Tasks List</h5>
+                                                </div>
+
+                                                <div class="card-body">
+                                                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                                                        <div class="accordion-item" v-for="(sub_task, index) in allSubTasks" :key="index">
+                                                            <h2 class="accordion-header" :id="`flush-heading${index}`">
+                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                                                :data-bs-target="`#flush-collapse${index}`" aria-expanded="false"
+                                                                 :aria-controls="`flush-collapse${index}`">
+                                                                {{index + 1 + ' - ' + sub_task.title}}
+                                                            </button>
+                                                            </h2>
+                                                            <div :id="`flush-collapse${index}`" class="accordion-collapse collapse" :aria-labelledby="`flush-heading${index}`" 
+                                                                data-bs-parent="#accordionFlushExample">
+                                                                <div class="accordion-body">
+                                                                    
+                                                                    <Show :taskInfo="sub_task"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                      
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -330,7 +365,9 @@ export default {
                 result: '',
                 progress: 0,
                 file:'',
-            }
+            },
+
+            allSubTasks: {},
 
         }
     },
@@ -445,6 +482,8 @@ export default {
             this.taskData.clear()
 
             this.taskData.parent_id = task.id
+
+            this.allSubTasks = task.sub_tasks
 
            
 
