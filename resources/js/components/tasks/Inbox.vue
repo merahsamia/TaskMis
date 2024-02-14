@@ -260,9 +260,16 @@
 
                                     <div class="row" v-if="subTasksMode">
                                         <div class="col-md-12 text-right">
-                                            <button class="btn btn-success" @click="storeSubTask">
-                                                Create Sub Task
+
+                                            <button class="btn btn-danger mx-2" v-if="subEditMode" @click="cancelSubTaskEdit()">
+                                                Cancel
                                             </button>
+                                            
+                                            <button class="btn btn-success" @click="!subEditMode ? storeSubTask() : updateSubTask()">
+                                                {{ !subEditMode ? 'Create Sub Task' : 'Save Changes' }}
+                                            </button>
+
+                                           
                                         </div>
                                     </div>
 
@@ -287,6 +294,20 @@
                                                                 data-bs-parent="#accordionFlushExample">
                                                                 <div class="accordion-body">
                                                                     
+                                                                    <div class="row mb-3">
+                                                                        <div class="col-md-12">
+
+                                                                            <a href="#" class="btn btn-success btn-sm mr-2"
+                                                                                @click.prevent="editSubTask(sub_task)">
+                                                                                <i class="fa fa-edit"></i>
+                                                                            </a>
+                                                                            <a href="#" class="btn btn-danger btn-sm mr-2"
+                                                                                @click.prevent="deleteSubTask(sub_task)">
+                                                                                <i class="fa fa-trash"></i>
+                                                                            </a>
+
+                                                                        </div>
+                                                                    </div>
                                                                     <Show :taskInfo="sub_task"/>
                                                                 </div>
                                                             </div>
@@ -368,6 +389,7 @@ export default {
             },
 
             allSubTasks: {},
+            subEditMode: false,
 
         }
     },
@@ -449,6 +471,9 @@ export default {
             
             this.subTasksMode = false
 
+            this.subEditMode = false
+
+
             this.performTaskData.result = task.result
             this.performTaskData.progress = task.progress
 
@@ -477,6 +502,7 @@ export default {
             this.editMode = false
             this.performMode = false
             this.subTasksMode = true
+            this.subEditMode = false
 
             this.taskData.reset()
             this.taskData.clear()
@@ -485,7 +511,6 @@ export default {
 
             this.allSubTasks = task.sub_tasks
 
-           
 
             $('#exampleModal').modal('show')
 
@@ -494,6 +519,66 @@ export default {
         storeSubTask(){
                 this.$store.dispatch('storeTask', this.taskData)
         },
+
+        editSubTask(sub_task)
+        {
+            this.editMode = false
+            this.performMode = false
+            this.subTasksMode = true
+            this.subEditMode = true
+
+            this.taskData.reset()
+            this.taskData.clear()
+
+            this.taskData.id = sub_task.id
+            this.taskData.parent_id = sub_task.parent_id
+            this.taskData.title = sub_task.title
+            this.taskData.priority = sub_task.priority
+            this.taskData.start_date = sub_task.start_date
+            this.taskData.end_date = sub_task.end_date
+            this.taskData.description = sub_task.description
+
+            sub_task.users.forEach(user => {
+                this.taskData.assign_to.push(user.id)
+            })
+
+
+
+        },
+
+        cancelSubTaskEdit()
+        {
+            this.subEditMode = false
+            this.taskData.reset()
+            this.taskData.clear()
+
+        },
+
+        updateSubTask()
+        {
+            this.$store.dispatch('updateTask', this.taskData)
+
+        },
+
+        deleteSubTask(sub_task)
+        {
+            Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+            if (result.isConfirmed) {
+                this.$store.dispatch('deleteTask', sub_task)
+            }
+            });
+
+        },
+
+        
     },
 }
 </script>
