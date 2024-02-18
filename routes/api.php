@@ -33,7 +33,7 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
         Route::post('updateDepartment/{id}',  'updateDepartment')->middleware('permission:departments-update');
         Route::post('deleteDepartment/{id}',  'deleteDepartment')->middleware('permission:departments-delete');
     });
-
+    
 
     Route::controller(ApiController::class)->group(function(){
 
@@ -64,6 +64,11 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
         Route::get('getInboxTasks', 'getInboxTasks')->middleware('permission:inbox-read');
         Route::post('storePerformTask', 'storePerformTask')->middleware('permission:inbox-update');
         Route::get('getCompletedTasks', 'getCompletedTasks')->middleware('permission:completed-read');
+
+        Route::get('searchTask',  'searchTask')->middleware('permission:tasks-read');
+        Route::get('searchInbox',  'searchInbox')->middleware('permission:inbox-read');
+        Route::get('searchCompleted',  'searchCompleted')->middleware('permission:completed-read');
+
 
     });
     

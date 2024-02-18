@@ -20,14 +20,15 @@
                             <div class="form-group">
                                 <label for="search_type">Search Type</label>
                                 <select name="search_type" class="form-control" v-model="searchData.search_type">
-                                    <option value="name">Name</option>
+                                    <option value="title">Title | Priority | Dates</option>
+                                    <option value="users">Assigned To</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="search_value">Search Value</label>
-                            <input type="text" class="form-control" name="search_value" v-model="searchData.search_value" @keyup="searchDepartment">
+                            <input type="text" class="form-control" name="search_value" v-model="searchData.search_value" @keyup="searchTask">
                             </div>
                         </div>                                      
                      </div>
@@ -236,7 +237,7 @@ export default {
 
           
             searchData: {
-                search_type:'name',
+                search_type:'title',
                 search_value:'',
             },
 
@@ -350,7 +351,12 @@ export default {
 
             $('#exampleModal').modal('show')
 
-        }
+        },
+
+        searchTask() {
+            this.$store.dispatch('searchTask', this.searchData)
+
+        },
 
     }
 

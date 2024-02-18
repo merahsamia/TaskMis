@@ -19,14 +19,16 @@
                             <div class="form-group">
                                 <label for="search_type">Search Type</label>
                                 <select name="search_type" class="form-control" v-model="searchData.search_type">
-                                    <option value="name">Name</option>
+
+                                    <option value="title">Title | Priority | Dates</option>
+
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="search_value">Search Value</label>
-                            <input type="text" class="form-control" name="search_value" v-model="searchData.search_value" @keyup="searchDepartment">
+                            <input type="text" class="form-control" name="search_value" v-model="searchData.search_value" @keyup="page_type == 'inbox' ? searchInbox() : searchCompleted()">
                             </div>
                         </div>                                      
                      </div>
@@ -89,7 +91,6 @@
                     </div>
 
                     <div class="d-flex justify-content-center" v-if="page_type =='inbox' ? inboxTaskLinks.length > 3 : completedTaskLinks.length > 3">
-
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li :class="`page-item ${link.active ? 'active': ''} ${ !link.url ? 'disabled': ''}`"
@@ -372,7 +373,7 @@ export default {
 
           
             searchData: {
-                search_type:'name',
+                search_type:'title',
                 search_value:'',
             },
 
@@ -577,6 +578,18 @@ export default {
             });
 
         },
+
+        searchInbox() {
+            this.$store.dispatch('searchInbox', this.searchData)
+
+        },
+        searchCompleted() {
+            this.$store.dispatch('searchCompleted', this.searchData)
+
+        },
+
+
+
 
         
     },
