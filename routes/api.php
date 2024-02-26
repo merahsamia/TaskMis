@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,15 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
         Route::get('searchTask',  'searchTask')->middleware('permission:tasks-read');
         Route::get('searchInbox',  'searchInbox')->middleware('permission:inbox-read');
         Route::get('searchCompleted',  'searchCompleted')->middleware('permission:completed-read');
+
+
+    });
+
+
+    Route::controller(CommentController::class)->group(function() {
+
+        Route::post('storeComment', 'storeComment')->middleware('permission:comments-create');
+        
 
 
     });

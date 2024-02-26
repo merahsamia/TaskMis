@@ -13,6 +13,9 @@ import Inbox from './components/tasks/Inbox.vue'
 import Form from 'vform'
 window.Form = Form;
 
+var Emitter = require('tiny-emitter')
+window.emitter = new Emitter()
+
 import Multiselect from '@vueform/multiselect'
 import '@vueform/multiselect/themes/default.css'
 
