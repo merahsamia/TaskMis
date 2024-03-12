@@ -45,6 +45,7 @@
                                     <th>Description</th>
                                     <th>Assign To</th>
                                     <th>Status</th>
+                                    <th v-if="current_permissions.has('comments-read')">ِComments</th>
                                     <th v-if="current_permissions.has('subs-read')">Sub Tasks</th>
                                     <th v-if="page_type == 'inbox' ? current_permissions.has
                                     ('inbox-update') : current_permissions.has('completed-update') ">Actions</th>
@@ -71,6 +72,13 @@
                                         <p v-if="task.progress > 0 && task.progress < 100" class="text-warning">Under Progress</p>
                                         <p v-if="task.progress == 100" class="text-success">Completed</p>
                                     </td>
+
+                                    <td v-if="current_permissions.has('comments-read')">
+                                        <button type="button" class="btn btn-secondary" @click="showComments(task)">
+                                                <i class="fa fa-comment"></i>
+                                        </button>                                   
+                                    </td>
+                                    
 
                                     <td v-if="current_permissions.has ('subs-read')">
                                         <button class="btn btn-secondary mx-1" v-on:click="subTasks(task)">
@@ -335,6 +343,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <Comments :taskInfo="taskInfo"  :comments="comments"/>
+
                    
 
                 </div>
@@ -349,9 +360,12 @@
 <script>
 
 import Show from './Show.vue';
+import Comments from './Comments.vue';
+
 export default {
     components: {
         Show,
+        Comments,
     },
 
     data() {
@@ -444,10 +458,15 @@ export default {
             return this.$store.getters.filtered_users
         },
 
+        comments(){
+            return this.$store.getters.comments
+        },
+
     },
 
 
     methods: {
+        
         getResults(link) {
             if(!link.url || link.active){
                 return;
@@ -585,6 +604,17 @@ export default {
         },
         searchCompleted() {
             this.$store.dispatch('searchCompleted', this.searchData)
+
+        },
+
+        showComments(task){
+            this.taskInfo = task
+
+            window.emitter.emit('resetCommentData')
+            this.$store.dispatch('getComments', {taskData: task} )
+
+            $('#commentsModal').modal('show')
+
 
         },
 

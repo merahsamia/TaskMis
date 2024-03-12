@@ -205,7 +205,7 @@
                     </div>
 
 
-                    <Comments :taskInfo="taskInfo"/>
+                    <Comments :taskInfo="taskInfo"  :comments="comments"/>
 
                 </div>
             </div>
@@ -282,6 +282,10 @@ export default {
 
         tasksLinks(){
             return this.$store.getters.tasksLinks
+        },
+
+        comments(){
+            return this.$store.getters.comments
         },
 
         },
@@ -371,6 +375,10 @@ export default {
 
         showComments(task){
             this.taskInfo = task
+
+            window.emitter.emit('resetCommentData')
+            this.$store.dispatch('getComments', {taskData: task} )
+
             $('#commentsModal').modal('show')
 
 
