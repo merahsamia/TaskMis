@@ -42,6 +42,7 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
         Route::get('getAllRoles', 'getAllRoles')->middleware('permission:roles-read');
         Route::get('getAllPermissions', 'getAllPermissions')->middleware('permission:permissions-read');
         Route::get('getAllUsers', 'getAllUsers')->middleware('permission:tasks-create');
+        Route::get('getUnreadNotifications', 'getUnreadNotifications');
     });
     
     

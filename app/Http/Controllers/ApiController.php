@@ -33,4 +33,9 @@ class ApiController extends Controller
         return response()->json(User::with('department')->with('roles')->with('permissions')->get());
     }
 
+    public function getUnreadNotifications()
+    {
+        return response()->json(auth('api')->user()->unreadNotifications);
+    }
+
 }

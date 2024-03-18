@@ -10,6 +10,8 @@ import PermissionsCreate from './components/permissions/PermissionsCreate.vue'
 import Tasks from './components/tasks/Tasks.vue'
 import Inbox from './components/tasks/Inbox.vue'
 
+import NotificationsComponent from './components/NotificationsComponent.vue'
+
 import Form from 'vform'
 window.Form = Form;
 
@@ -45,6 +47,8 @@ app.component('permissions-create', PermissionsCreate);
 app.component('users', Users);
 app.component('tasks', Tasks);
 app.component('inbox', Inbox);
+
+app.component('notifications-component', NotificationsComponent);
 
 window.url = '/TaskMis/'
 

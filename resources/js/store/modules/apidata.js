@@ -8,6 +8,7 @@ export default {
         filtered_permissions : [], 
         all_permissions : [], 
         filtered_users : [], 
+        unread_notifications: [],
         
     },
 
@@ -17,6 +18,7 @@ export default {
         filtered_departments(state) {
             return state.filtered_departments;
         },
+       
 
         filtered_roles(state) {
             return state.filtered_roles;
@@ -29,8 +31,13 @@ export default {
         filtered_permissions(state) {
             return state.filtered_permissions;
         },
+
         filtered_users(state) {
             return state.filtered_users;
+        },
+
+        unread_notifications(state) {
+            return state.unread_notifications;
         },
         
     },
@@ -44,6 +51,7 @@ export default {
             ({value: department.id, label: department.name}))    
         },
 
+        
         set_all_roles: (state, data) => {
             state.filtered_roles = []; 
              data.forEach(role => state.filtered_roles.push
@@ -125,6 +133,12 @@ export default {
             
         },
 
+        set_unread_notifications: (state, data) => {
+            state.unread_notifications = data; 
+               
+        },
+
+
        
     },
 
@@ -156,6 +170,13 @@ export default {
         getAllUsers: (context, data) => {
             axios.get(`${window.url}api/getAllUsers`).then((response) => {
                 context.commit('set_all_users', response.data)
+            })
+        },
+
+
+        getUnreadNotifications: (context) => {
+            axios.get(`${window.url}api/getUnreadNotifications`).then((response) => {
+                context.commit('set_unread_notifications', response.data)
             })
         },
     },
