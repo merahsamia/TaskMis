@@ -4,14 +4,24 @@
         
         <a class="text-secondary" href="#" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-bell" id="notification-icon"></i>
-            <span id="notification-count">{{ unread_notifications.length  }}</span>
+            <span id="notification-count" v-if="unread_notifications.length > 0">{{ unread_notifications.length  }}</span>
         </a>
 
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+
             <li v-for="(unread, index) in unread_notifications" :key="index">
                 <a class="dropdown-item" href="#">
                     {{ unread.data.message }}  -  {{ unread.data.title }}
-                </a></li>
+
+                    <p>{{ $filters.myDate(unread.created_at) }}</p>
+                </a>
+            </li>
+
+            <li v-if="unread_notifications.length == 0">
+                <a class="dropdown-item" href="#">
+                    No new notifications!
+                </a>
+            </li>
             
         </ul>
     </div>

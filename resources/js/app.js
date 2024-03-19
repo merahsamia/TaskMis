@@ -24,6 +24,9 @@ import '@vueform/multiselect/themes/default.css'
 import Swal from 'sweetalert2'
 window.Swal = Swal
 
+
+import moment from 'moment';
+
 const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -49,6 +52,12 @@ app.component('tasks', Tasks);
 app.component('inbox', Inbox);
 
 app.component('notifications-component', NotificationsComponent);
+
+app.config.globalProperties.$filters = {
+  myDate(date) {
+    return moment(date).startOf('hour').fromNow();
+  }
+}
 
 window.url = '/TaskMis/'
 
