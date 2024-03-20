@@ -9,6 +9,7 @@ export default {
         all_permissions : [], 
         filtered_users : [], 
         unread_notifications: [],
+        all_notifications: [],
         
     },
 
@@ -19,7 +20,6 @@ export default {
             return state.filtered_departments;
         },
        
-
         filtered_roles(state) {
             return state.filtered_roles;
         },
@@ -38,6 +38,10 @@ export default {
 
         unread_notifications(state) {
             return state.unread_notifications;
+        },
+
+        all_notifications(state) {
+            return state.all_notifications;
         },
         
     },
@@ -138,6 +142,11 @@ export default {
                
         },
 
+        set_all_notifications: (state, data) => {
+            state.all_notifications = data; 
+               
+        },
+
 
        
     },
@@ -173,11 +182,46 @@ export default {
             })
         },
 
-
         getUnreadNotifications: (context) => {
             axios.get(`${window.url}api/getUnreadNotifications`).then((response) => {
                 context.commit('set_unread_notifications', response.data)
             })
         },
+
+        
+
+        markNotificationAsRead: (context, unreadData) => {
+            axios.get(`${window.url}api/markNotificationAsRead?unread=${unreadData.id}`).then((response) => {
+                
+                context.dispatch('getUnreadNotifications')
+
+                window.Toast.fire({
+                    icon: "success",
+                    title: "Notification marked as read!"
+                  });
+            })
+        },
+
+        getAllNotifications: (context) => {
+            axios.get(`${window.url}api/getAllNotifications`).then((response) => {
+                context.commit('set_all_notifications', response.data)
+            })
+        },
+
+        clearAllNotifications: (context) => {
+            axios.get(`${window.url}api/clearAllNotifications`).then((response) => {
+                
+                context.dispatch('getAllNotifications')
+
+                window.Toast.fire({
+                    icon: "success",
+                    title: "All notifications cleared successfully!"
+                  });            })
+        },
+
+        
+
+      
+
     },
 }

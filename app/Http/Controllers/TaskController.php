@@ -89,6 +89,13 @@ class TaskController extends Controller
 
         $task->users()->sync($request->assign_to);
 
+        $message = 'Task Updated';
+
+        foreach($request->assign_to as $user_id) {
+            $userToNotify = User::findOrFail($user_id);
+            $userToNotify->notify(new TaskNotification(auth('api')->user(), $task, $message));
+        };
+
         return response()->json('success');
     }
 
@@ -119,9 +126,15 @@ class TaskController extends Controller
             $performed_by = auth('api')->user()->id;
             $status= 1;
 
+            $message = 'Task Completed';
+
+
         }else {
             $performed_by = 0;
             $status= 0;
+
+            $message = 'Task Performance';
+
         }
 
         if($request->file){
@@ -148,6 +161,11 @@ class TaskController extends Controller
             'file'           => $file,
             'status'         => $status,
         ]);
+
+
+        $userToNotify = User::findOrFail($task->user_id);
+        $userToNotify->notify(new TaskNotification(auth('api')->user(), $task, $message));
+        
 
         return response()->json('success');
 
