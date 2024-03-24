@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('task.{id}', function() {
+    return true;
+}, ['gaurds' => ['web', 'api']]);
+
+
+Broadcast::channel('notification', function() {
+    return true;
+}, ['guards' => ['web', 'api']]);

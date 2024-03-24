@@ -602,6 +602,7 @@ export default {
             this.$store.dispatch('searchInbox', this.searchData)
 
         },
+        
         searchCompleted() {
             this.$store.dispatch('searchCompleted', this.searchData)
 
@@ -613,9 +614,19 @@ export default {
             window.emitter.emit('resetCommentData')
             this.$store.dispatch('getComments', {taskData: task} )
 
+            this.ListenToComments(task)
+
+
             $('#commentsModal').modal('show')
 
 
+        },
+
+        ListenToComments(task) {
+            Echo.channel(`task.${task.id}`).listen('CommentEvent', () => {
+                this.$store.dispatch('getComments', {taskData: task} )
+
+            });
         },
 
 

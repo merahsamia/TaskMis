@@ -93,6 +93,9 @@ export default {
 
     mounted() {
         this.$store.dispatch('getUnreadNotifications')
+
+        this.ListenToNotifications()
+
     },
 
     methods: {
@@ -132,6 +135,13 @@ export default {
                         this.$store.dispatch('clearAllNotifications')
                     }
                     });
+        },
+
+        ListenToNotifications() {
+            Echo.channel(`notification`).listen('NotificationEvent', () => {
+                this.$store.dispatch('getUnreadNotifications')
+
+            });
         },
 
 
