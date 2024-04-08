@@ -49,6 +49,7 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
         Route::get('clearAllNotifications', 'clearAllNotifications');
 
         Route::get('getBarChartData/{year}', 'getBarChartData');
+        Route::post('exportExcel', 'exportExcel');
     });
     
     

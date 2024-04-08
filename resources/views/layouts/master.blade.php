@@ -84,6 +84,13 @@
                     </li>
                     @endcan
 
+                    @can('reports-read')
+
+                    <li class="{{  Request::is('tasks/reports') ? 'active' : ''}}">
+                        <a href="{{route('tasksReport')}}">Reports</a>
+                    </li>
+                    @endcan
+
                 </ul>
 
                 <div class="footer">

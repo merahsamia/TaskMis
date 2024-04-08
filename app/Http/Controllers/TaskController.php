@@ -277,6 +277,12 @@ class TaskController extends Controller
         return response()->json($tasks);
     }
 
+    public function tasksReport()
+    {
+        return view('tasks.reports');
+
+    }
+
 
   
 }

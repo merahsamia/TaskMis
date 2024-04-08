@@ -16,6 +16,8 @@ import DashboardComponent from './components/DashboardComponent.vue'
 import TasksBarChart from './components/tasks/TasksBarChart.vue'
 import ContactComponent from './components/ContactComponent.vue'
 
+import Reports from './components/tasks/Reports.vue'
+
 import Form from 'vform'
 window.Form = Form;
 
@@ -61,6 +63,8 @@ app.component('dashboard-component', DashboardComponent);
 app.component('TasksBarChart', TasksBarChart);
 
 app.component('contact-component', ContactComponent);
+
+app.component('reports', Reports);
 
 app.config.globalProperties.$filters = {
   myDate(date) {
