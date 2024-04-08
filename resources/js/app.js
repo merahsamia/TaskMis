@@ -12,6 +12,10 @@ import Inbox from './components/tasks/Inbox.vue'
 
 import NotificationsComponent from './components/NotificationsComponent.vue'
 
+import DashboardComponent from './components/DashboardComponent.vue'
+import TasksBarChart from './components/tasks/TasksBarChart.vue'
+import ContactComponent from './components/ContactComponent.vue'
+
 import Form from 'vform'
 window.Form = Form;
 
@@ -52,6 +56,11 @@ app.component('tasks', Tasks);
 app.component('inbox', Inbox);
 
 app.component('notifications-component', NotificationsComponent);
+
+app.component('dashboard-component', DashboardComponent);
+app.component('TasksBarChart', TasksBarChart);
+
+app.component('contact-component', ContactComponent);
 
 app.config.globalProperties.$filters = {
   myDate(date) {

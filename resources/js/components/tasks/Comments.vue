@@ -99,6 +99,7 @@ import Form from 'vform';
             return this.$store.getters.current_permissions
           },
         },
+        
         data() {
 
             return {
@@ -109,6 +110,8 @@ import Form from 'vform';
                 }),
 
                 editMode: false,
+                current_user: {},
+
             }
         },
 

@@ -25,6 +25,7 @@
         "@popperjs/core": "^2.11.8",
         "@vueform/multiselect": "^2.6.6",
         "bootstrap": "^5.3.2",
+        "chart.js": "^4.4.2",
         "jquery": "^3.7.1",
         "laravel-echo": "^1.16.0",
         "moment": "^2.30.1",

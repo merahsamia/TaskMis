@@ -47,6 +47,8 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
         Route::get('markNotificationAsRead', 'markNotificationAsRead');
         Route::get('getAllNotifications', 'getAllNotifications');
         Route::get('clearAllNotifications', 'clearAllNotifications');
+
+        Route::get('getBarChartData/{year}', 'getBarChartData');
     });
     
     
@@ -90,6 +92,9 @@ Route::middleware(['forcetojson', 'auth:api'])->group(function(){
 
     });
     
+
 });
+
+Route::post('storeContact', [ApiController::class, 'storeContact']);
 
 

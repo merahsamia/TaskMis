@@ -188,8 +188,7 @@ export default {
             })
         },
 
-        
-
+    
         markNotificationAsRead: (context, unreadData) => {
             axios.get(`${window.url}api/markNotificationAsRead?unread=${unreadData.id}`).then((response) => {
                 
@@ -218,6 +217,28 @@ export default {
                     title: "All notifications cleared successfully!"
                   });            })
         },
+
+        storeContact: (context, contactData) => {
+            window.emitter.emit('emailLoading', true)
+            contactData.post(`${window.url}api/storeContact`).then((response) => {
+            $('#contactModal').modal('hide')
+            window.Toast.fire({
+                icon: "success",
+                title: "Email sent successfuly!"
+              });
+
+            }).catch(err => {
+                window.Toast.fire({
+                    icon: "warning",
+                    title: "Email not sent, please try again!"
+                  });
+            }).finally(() => {
+                window.emitter.emit('emailLoading', false)
+
+            })
+        },
+
+        
 
         
 

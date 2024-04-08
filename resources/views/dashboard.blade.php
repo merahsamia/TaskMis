@@ -1,5 +1,5 @@
 @extends('layouts.master')
 
 @section('content')
-<h1>Dashboard</h1>
+    <dashboard-component></dashboard-component>
 @endsection

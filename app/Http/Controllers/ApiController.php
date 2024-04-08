@@ -7,6 +7,12 @@ use App\Models\Department;
 use App\Models\Role;
 use App\Models\Permission;
 use App\Models\User;
+use App\Models\Task;
+
+use App\Mail\ContactMail;
+use App\Mail\ReplyMail;
+
+use Mail;
 
 class ApiController extends Controller
 {
@@ -67,4 +73,67 @@ class ApiController extends Controller
 
     }
     
+
+    public function getBarChartData($year)
+    {
+        $months =  ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $numeric_months = ['01', '02','03', '04','05', '06','07', '08','09', '10', '11','12'];
+
+
+        $tasks_array = [];
+        $other_completed_array = [];
+        $own_completed_array = [];
+
+        foreach($numeric_months as $nm)
+        {
+            $tasks = Task::where('user_id', auth('api')->user()->id)->whereMonth('tasks.created_at', '=', $nm)
+                    ->whereYear('tasks.created_at', '=', $year)->get();
+                    array_push($tasks_array, $tasks->count());
+        }
+
+        foreach($numeric_months as $nm)
+        {
+            $tasks = Task::where('user_id', auth('api')->user()->id)->where('status', '1')->whereMonth('tasks.created_at', '=', $nm)
+                    ->whereYear('tasks.created_at', '=', $year)->get();
+                    array_push($other_completed_array, $tasks->count());
+        }
+
+        foreach($numeric_months as $nm)
+        {
+            $tasks = auth('api')->user()->tasks()->where('status', '1')->whereMonth('tasks.created_at', '=', $nm)
+                    ->whereYear('tasks.created_at', '=', $year)->get();
+                    array_push($own_completed_array, $tasks->count());
+        }
+
+        return response()->json([
+            'year'                      => $year,
+            'months'                    => $months,
+            'tasks_array'               => $tasks_array,
+            'other_completed_array'     => $other_completed_array,
+            'own_completed_array'       => $own_completed_array,
+
+        ]);
+
+    }
+
+
+    public function storeContact(Request $request)
+    {
+        $request->validate([
+            'name'  => ['required'],
+            'email'  => ['required'],
+            'message'  => ['required'],
+        ]);
+
+        $data = array (
+            'name'  => $request->name,
+            'email'  => $request->email,
+            'message'  => $request->message,
+        );
+
+        Mail::to('admin@app.com')->send(new ContactMail($data));
+        Mail::to($data['email'])->send(new ReplyMail($data));
+
+        return response()->json('success');
+    }
 }

@@ -18,7 +18,7 @@
                     <div class="col-md-6 d-md-block d-none">
                         <img src="{{ asset('public/images/auth.png')}}" alt="auth" width="100%">
                     </div>
-                    <div class=" col-md-6">
+                    <div class=" col-md-6" id="app">
                         @if(Session::has('success-message'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 {{Session::get('success-message')}}
@@ -31,7 +31,8 @@
             </div>
         </div>
     </div>
-  
+    <script src="{{asset('public/js/app.js')}}"></script>
+
 </body>
 
 </html>
