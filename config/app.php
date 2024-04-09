@@ -97,6 +97,11 @@ return [
 
     'fallback_locale' => 'en',
 
+    'available_locales' => [
+        'English'  => 'en',
+        'Dari'     => 'dr',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Faker Locale

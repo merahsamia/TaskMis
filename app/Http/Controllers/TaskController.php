@@ -66,8 +66,15 @@ class TaskController extends Controller
 
     public function getTasks()
     {
+        $user_role = auth('api')->user()->hasRole('admin');
+
         $user_id = auth('api')->user()->id;
-        return response()->json(Task::where('user_id', $user_id)->where('parent_id', '0')->with('users')->with('performed_by_user')->latest()->paginate(2));
+
+        $tasks = !$user_role 
+                ? Task::where('user_id', $user_id)->where('parent_id', '0')->with('users')->with('department')->with('performed_by_user')->latest()->paginate(2)
+                : Task::where('parent_id', '0')->with('users')->with('department')->with('performed_by_user')->latest()->paginate(2);
+
+        return response()->json($tasks);
 
     }
 
@@ -201,12 +208,21 @@ class TaskController extends Controller
 
     public function searchTask()
     {
+        $user_role = auth('api')->user()->hasRole('admin');
 
         $user_id = auth('api')->user()->id;
 
         if($search = \Request::get('users')){
 
-            $tasks = Task::where('user_id', $user_id)->where('parent_id', '0')->with('users')
+            $tasks = !$user_role 
+                     ? Task::where('user_id', $user_id)->where('parent_id', '0')->with('users')->with('department')
+                    ->with('performed_by_user')->whereHas( 'users',function($query) use ($search){
+
+                    $query->where('name', 'LIKE', "%$search%");
+
+                    })->latest()->paginate(2)
+
+                     : Task::where('parent_id', '0')->with('users')->with('department')
                     ->with('performed_by_user')->whereHas( 'users',function($query) use ($search){
 
                     $query->where('name', 'LIKE', "%$search%");
@@ -215,19 +231,32 @@ class TaskController extends Controller
 
         }else if($search = \Request::get('title')) {
 
-            $tasks = Task::where('user_id', $user_id)->where('parent_id', '0')->with('users')
-            ->with('performed_by_user')->where
-            (function($query) use ($search){
-            $query->where('title', 'LIKE', "%$search%")
-                  ->orWhere('priority', 'LIKE', "%$search%")
-                  ->orWhere('start_date', 'LIKE', "%$search%")
-                  ->orWhere('end_date', 'LIKE', "%$search%");
+            $tasks = !$user_role 
+                    ? Task::where('user_id', $user_id)->where('parent_id', '0')->with('users')->with('department')
+                    ->with('performed_by_user')->where
+                    (function($query) use ($search){
+                    $query->where('title', 'LIKE', "%$search%")
+                        ->orWhere('priority', 'LIKE', "%$search%")
+                        ->orWhere('start_date', 'LIKE', "%$search%")
+                        ->orWhere('end_date', 'LIKE', "%$search%");
 
-            })->latest()->paginate(2);
+                    })->latest()->paginate(2)
+
+                    : Task::where('parent_id', '0')->with('users')->with('department')
+                    ->with('performed_by_user')->where
+                    (function($query) use ($search){
+                    $query->where('title', 'LIKE', "%$search%")
+                        ->orWhere('priority', 'LIKE', "%$search%")
+                        ->orWhere('start_date', 'LIKE', "%$search%")
+                        ->orWhere('end_date', 'LIKE', "%$search%");
+
+                    })->latest()->paginate(2);
 
 
         }else{
-           $tasks = Task::where('user_id', $user_id)->where('parent_id', '0')->with('users')->with('performed_by_user')->latest()->paginate(2);
+           $tasks = !$user_role 
+                    ? Task::where('user_id', $user_id)->where('parent_id', '0')->with('users')->with('department')->with('performed_by_user')->latest()->paginate(2)
+                    : Task::where('parent_id', '0')->with('users')->with('performed_by_user')->latest()->paginate(2);
         }
 
         return response()->json($tasks);

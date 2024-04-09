@@ -15,8 +15,8 @@
                                     <option value="#" disabled>Select a type</option>
                                     <option value="assigned" v-if="current_permissions.has('tasks-create')">Assigned Tasks</option>
                                     <option value="other_completed" v-if="current_permissions.has('tasks-create')">Completed Tasks</option>
-                                    <option value="all_inbox" v-if="current_permissions.has('inbox-read')">Inbox Tasks</option>
-                                    <option value="completed_inbox" v-if="current_permissions.has('inbox-update')">Completed Inbox Tasks</option>
+                                    <option value="all_inbox" v-if="current_permissions.has('inbox-read') && !current_roles.has('admin')">Inbox Tasks</option>
+                                    <option value="completed_inbox" v-if="current_permissions.has('inbox-update') && !current_roles.has('admin')">Completed Inbox Tasks</option>
                                 </select>
                                 <div class="text-danger" v-if="reportData.errors.has('type')" v-html="reportData.errors.get('type')" />
                             </div>

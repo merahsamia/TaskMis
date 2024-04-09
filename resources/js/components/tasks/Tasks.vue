@@ -38,6 +38,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Department</th>
                                     <th>Title</th>
                                     <th>Priority</th>
                                     <th>Start Date</th>
@@ -52,6 +53,7 @@
                             <tbody>
                                 <tr v-for="(task, index) in tasks.data" :key="index">
                                     <td>{{ index + 1 }}</td>
+                                    <td>{{ task.department.name }}</td>
                                     <td>{{ task.title }}</td>
                                     <td>
                                         <span :class="`badge ${task.priority == 'Urgent' ? 'badge-danger' : 'badge-success'}`">

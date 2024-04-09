@@ -151,6 +151,8 @@ class ApiController extends Controller
 
     public function exportExcel(Request $request)
     {
+        $user_role = auth('api')->user()->hasRole('admin');
+
         $request->validate([
             'type'          => 'required',
             'start_date'    => 'required',
@@ -162,11 +164,17 @@ class ApiController extends Controller
         $end_date = $request->end_date;
 
         if($type == 'assigned'){
-            $tasks = Task::where('user_id', auth('api')->user()->id)->where('parent_id', '0')
+            $tasks = !$user_role 
+                        ? Task::where('user_id', auth('api')->user()->id)->where('parent_id', '0')
+                        ->whereBetween('created_at', [$start_date, $end_date])->with('users')->with('performed_by_user')->latest()->get()
+                        : Task::where('parent_id', '0')
                         ->whereBetween('created_at', [$start_date, $end_date])->with('users')->with('performed_by_user')->latest()->get();
         }
         if($type == 'other_completed'){
-            $tasks = Task::where('user_id', auth('api')->user()->id)->where('parent_id', '0')->where('status', '1')
+            $tasks = !$user_role 
+                        ? Task::where('user_id', auth('api')->user()->id)->where('parent_id', '0')->where('status', '1')
+                        ->whereBetween('created_at', [$start_date, $end_date])->with('users')->with('performed_by_user')->latest()->get()
+                        : Task::where('parent_id', '0')->where('status', '1')
                         ->whereBetween('created_at', [$start_date, $end_date])->with('users')->with('performed_by_user')->latest()->get();
         }
         if($type == 'all_inbox'){

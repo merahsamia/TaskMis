@@ -28,6 +28,10 @@ class AuthController extends Controller
             $successToken = $user->createToken('task_mis_token')->accessToken;
             session()->put('token', $successToken);
 
+            $locale ='en';
+            app()->setLocale($locale);
+            session()->put('locale', $locale);
+
             return redirect()->route('dashboard');
         }
 

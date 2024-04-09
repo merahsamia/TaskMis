@@ -26,7 +26,7 @@
                 <ul class=" list-unstyled components mb-5">
 
                                 <li class="{{  Request::is('dashboard') ? 'active' : ''}}">
-                                    <a href="{{route('dashboard')}}">Dashboard</a>
+                                    <a href="{{route('dashboard')}}">{{__('Dashboard')}}</a>
                                 </li>
                     @can('admin')
 
@@ -66,29 +66,32 @@
                     @endcan
 
                     @can('tasks-read')
-                    <li class="{{  Request::is('tasks/index') ? 'active' : ''}}">
-                        <a href="{{route('tasksIndex')}}">Assigned Tasks</a>
-                    </li>
+                        <li class="{{  Request::is('tasks/index') ? 'active' : ''}}">
+                            <a href="{{route('tasksIndex')}}">Assigned Tasks</a>
+                        </li>
                     @endcan
                     @can('inbox-read')
 
-                    <li class="{{  Request::is('tasks/inbox') ? 'active' : ''}}">
-                        <a href="{{route('tasksInbox')}}">Inbox Tasks</a>
-                    </li>
+                        @cannot('admin')
+                            <li class="{{  Request::is('tasks/inbox') ? 'active' : ''}}">
+                                <a href="{{route('tasksInbox')}}">Inbox Tasks</a>
+                            </li>
+                        @endcannot
                     @endcan
 
                     @can('completed-read')
-
-                    <li class="{{  Request::is('tasks/completed') ? 'active' : ''}}">
-                        <a href="{{route('tasksCompleted')}}">Completed Tasks</a>
-                    </li>
+                         @cannot('admin')
+                            <li class="{{  Request::is('tasks/completed') ? 'active' : ''}}">
+                                <a href="{{route('tasksCompleted')}}">Completed Tasks</a>
+                            </li>
+                        @endcannot
                     @endcan
 
                     @can('reports-read')
 
-                    <li class="{{  Request::is('tasks/reports') ? 'active' : ''}}">
-                        <a href="{{route('tasksReport')}}">Reports</a>
-                    </li>
+                        <li class="{{  Request::is('tasks/reports') ? 'active' : ''}}">
+                            <a href="{{route('tasksReport')}}">Reports</a>
+                        </li>
                     @endcan
 
                 </ul>
@@ -125,6 +128,7 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
+                            @include('partials.languageSwitcher')
                             <li class="nav-item active">
                                 <a class="nav-link" href="{{ route('profileIndex') }}">Settings</a>
                             </li>
@@ -172,6 +176,8 @@
         window.auth_user = {!!json_encode(auth()->user()) !!};
         window.auth_roles = {!!json_encode(auth()->user()->roles) !!};
         window.auth_permissions = {!!json_encode(auth()->user()->permissions) !!};
+
+        window.locale = {!! json_encode(session()->get('locale')) !!}
     </script>
   @endauth
     <script src="{{asset('public/js/app.js')}}"></script>

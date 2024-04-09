@@ -18,6 +18,19 @@ import ContactComponent from './components/ContactComponent.vue'
 
 import Reports from './components/tasks/Reports.vue'
 
+import { createI18n } from 'vue-i18n/dist/vue-i18n.cjs';
+
+let locale = window.locale;
+
+import messagesFile from './store/messages';
+const messages = messagesFile.messages;
+
+const i18n = createI18n({
+  locale:locale,
+  fallbackLocale: 'en',
+  messages,
+})
+
 import Form from 'vform'
 window.Form = Form;
 
@@ -75,5 +88,7 @@ app.config.globalProperties.$filters = {
 window.url = '/TaskMis/'
 
 app.use(store)
+
+app.use(i18n)
 
 app.mount('#app')
