@@ -188,10 +188,6 @@
     <script src="{{asset('public/js/app.js')}}"></script>
 
     <script src="{{ asset('public/sidebar/js/main.js')}}"></script>
-    
-    @if(session('locale') == 'dr')
-        <script src="{{ asset('public/sidebar/js/dr.js')}}"></script>
-    @endif
 </body>
 
 </html>

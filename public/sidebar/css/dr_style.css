@@ -1,0 +1,17 @@
+* {
+    direction: rtl;
+    text-align: right;
+}
+
+.management-icon {
+    float: left !important;
+}
+
+.list-unstyled{
+    padding-right: 15px;
+}
+
+.user-name {
+    margin-right: 10px !important;
+}
+
